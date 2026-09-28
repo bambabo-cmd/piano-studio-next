@@ -1,0 +1,18 @@
+PASS namespaced v1 cache retained
+PASS v1 cache retained
+PASS other app cache retained
+PASS same app other-scope cache retained
+PASS old own-scope cache deleted
+PASS new cache installed
+PASS network app responds
+PASS cached app used on network failure
+PASS model asset available in simulated cache
+PASS switcher available offline
+PASS missing script not replaced with HTML
+PASS v1 requests not intercepted
+PASS non-GET requests ignored
+PASS external requests ignored
+PASS HTTP error does not overwrite good cache
+PASS font loaded in own cache
+PASS font available offline
+{"scope":"Node VM simulation, not browser PWA execution","passed":17,"total":17}

@@ -1,0 +1,17 @@
+/* Namespaced, additive controls. Existing panels and commands are not hidden. */
+body{padding-bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+#ps-tools-theme{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-left:auto;font-size:13px}
+#ps-tools-theme label{display:flex;gap:6px;align-items:center}
+#ps-tools-theme select,#ps-tools-theme button{min-height:44px}
+#ps-tools-dock{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:35;display:flex;align-items:center;gap:8px;width:min(1180px,100%);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:var(--panel,#fff);color:var(--ink,#1f2a44);border:1px solid var(--line,#dadfea);border-radius:16px 16px 0 0;box-shadow:0 -6px 28px #0001}
+#ps-tools-dock button{min-height:48px;min-width:108px;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;font-size:13px;font-weight:600}
+#ps-tools-dock [data-ps-action=record]{background:var(--rec,#E0344A);border-color:var(--rec,#E0344A);color:white}
+#ps-tools-dock [aria-pressed=true]{border-color:var(--accent,#3552D6);background:var(--ink,#1f2a44);color:var(--paper,#f4f6fb)}
+#ps-tools-status{font-size:11px;line-height:1.5;color:var(--muted,#5c6684);margin-left:auto}
+#ps-tools-dock button:focus-visible,#ps-tools-theme :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(max-width:720px){#ps-tools-theme{margin:0;width:100%;justify-content:space-between}#ps-tools-theme select{font-size:16px;max-width:145px}#ps-tools-dock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px))}#ps-tools-dock button{min-width:0;min-height:53px;font-size:11px;padding:5px 2px;flex-direction:column;gap:3px}#ps-tools-status{display:none}}
+@media print{#ps-tools-dock,#ps-tools-theme{display:none!important}body{padding-bottom:0}}
+/* Theme updates also cover the canvas renderer through next-boot.js. */
+.ps-next-preview-link{display:inline-flex;align-items:center;min-height:44px;padding:5px 10px;color:var(--accent);font-size:12px;white-space:nowrap}
+@media (max-width:720px){#ps-tools-theme{gap:5px}.ps-next-preview-link{font-size:11px;min-height:38px;padding:4px 6px}}
+@media print{.ps-next-preview-link{display:none!important}}

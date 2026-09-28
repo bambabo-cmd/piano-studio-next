@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f6fb">
+<title>우리집 연주실 2 · 화면 시안 (녹음·AI 미연결)</title>
+<script>
+/* Persistent three-way theme; independent of song and recording storage. */
+(() => {
+  'use strict';
+  const key = 'piano-studio-next-preview-theme-v2';
+  const valid = ['system', 'dark', 'light'];
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+  let choice = 'dark';
+  try { const saved = localStorage.getItem(key); if (valid.includes(saved)) choice = saved; } catch (_) {}
+  function apply() {
+    const resolved = choice === 'system' ? (media.matches ? 'dark' : 'light') : choice;
+    document.documentElement.dataset.theme = resolved;
+    document.documentElement.dataset.themeChoice = choice;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = resolved === 'dark' ? '#101521' : '#f4f6fb';
+    document.querySelectorAll('[data-theme-choice]').forEach(button => {
+      const selected = button.dataset.themeChoice === choice;
+      button.classList.toggle('active', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
+    document.querySelectorAll('[data-theme-select]').forEach(select => { select.value = choice; });
+    window.dispatchEvent(new CustomEvent('piano-theme-change', {detail: {choice, resolved}}));
+  }
+  function set(value) {
+    if (!valid.includes(value)) return false;
+    choice = value;
+    let saved = true;
+    try { localStorage.setItem(key, choice); } catch (_) { saved = false; }
+    apply();
+    return saved;
+  }
+  if (media.addEventListener) media.addEventListener('change', () => { if (choice === 'system') apply(); });
+  else if (media.addListener) media.addListener(() => { if (choice === 'system') apply(); });
+  window.PianoTheme = {set, apply, get: () => ({choice, resolved:document.documentElement.dataset.theme})};
+  apply();
+})();
+
+</script>
+<style>
+:root{--bg:#f4f6fb;--surface:#fff;--ink:#202c45;--muted:#67758c;--line:#dfe5ef;--blue:#375ac5;--blue-soft:#edf1fc;--red:#d74457;--green:#178479;--green-soft:#eaf6f3;--shadow:0 8px 30px #25324b08;--app-height:100dvh;--radius:18px;font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans CJK KR","Malgun Gothic",sans-serif;color:var(--ink);font-size:14px;color-scheme:light}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}button,input,select{font:inherit;color:inherit}button{cursor:pointer;user-select:none;touch-action:manipulation}button,input,select{min-height:44px;border:1px solid var(--line);border-radius:11px;background:white}button{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 13px;white-space:nowrap;font-weight:600}button:hover:not(:disabled){background:#f0f3fa}button:disabled{opacity:.4;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid #7b99fa;outline-offset:2px}button.primary{background:var(--blue);border-color:var(--blue);color:white}button.primary:hover{background:#294cac}button.record{background:var(--red);border-color:var(--red);color:white}button.flat{background:transparent;border-color:transparent}button.active,button[aria-pressed=true].toggle{background:var(--blue-soft);color:var(--blue);border-color:#ccd6f5}.icon{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.icon-btn{width:44px;padding:0;flex-shrink:0}.muted{color:var(--muted)}.small{font-size:12px}.tiny{font-size:11px}.label{font-size:12px;font-weight:650;color:var(--muted)}.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden}.flex{display:flex;align-items:center;gap:8px}.grow{flex:1;min-width:0}.chip{display:inline-flex;gap:6px;align-items:center;padding:5px 9px;background:#eef2f7;border-radius:7px;white-space:nowrap;font-size:11px;font-weight:650}.chip.blue{background:var(--blue-soft);color:var(--blue)}.chip.green{background:var(--green-soft);color:var(--green)}.dot{width:6px;height:6px;background:currentColor;border-radius:50%;display:inline-block}.divider{width:1px;height:24px;background:var(--line)}.app{height:100vh;height:var(--app-height);display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overflow:hidden}
+.app-head{height:72px;padding:0 24px;display:flex;gap:18px;align-items:center;border-bottom:1px solid var(--line);background:var(--surface)}.brand{display:flex;align-items:center;gap:10px;flex-shrink:0;font-weight:800;font-size:18px;letter-spacing:-.8px}.brand-mark{width:34px;height:36px;background:var(--ink);border-radius:9px;display:flex;gap:3px;padding:8px 6px;color:white}.brand-mark i{position:relative;background:white;width:6px;border-radius:2px}.brand-mark i:not(:last-child):after{content:"";position:absolute;left:4px;top:-1px;width:4px;height:11px;background:var(--ink);border:1px solid var(--ink);border-radius:0 0 1px 1px}.head-song{border-left:1px solid var(--line);padding-left:22px;flex:1;min-width:0;line-height:1.5}.head-song strong{display:block;font-size:14px}.head-right{display:flex;gap:8px;align-items:center}.demo-chip{color:#705e26;background:#faf4de}.mode-label{display:none}
+.workspace{display:grid;grid-template-columns:238px minmax(0,1fr) 224px;gap:16px;min-height:0;padding:20px 22px;overflow:hidden}.left-rail{display:flex;flex-direction:column;gap:14px;min-height:0;overflow:auto;scrollbar-width:thin}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.record-card{padding:20px}.eyebrow{font-size:10px;letter-spacing:1.3px;font-weight:750;color:var(--blue);margin-bottom:10px}.record-card h1{font-size:21px;letter-spacing:-.8px;margin:0 0 6px;line-height:1.4}.record-card p{font-size:12px;color:var(--muted);line-height:1.8;margin:0}.record-status{display:flex;gap:8px;align-items:center;margin-top:17px;font-size:12px}.record-status .dot{background:var(--red)}.record-clock{font-variant-numeric:tabular-nums;font-size:24px;letter-spacing:-1px;font-weight:650;margin-left:auto}.waveform{height:40px;display:flex;align-items:center;gap:3px;margin:13px 0 8px;overflow:hidden}.waveform i{flex:1;background:#dbe3f5;border-radius:2px;min-width:2px}.is-recording .waveform i{background:#e98897;animation:wave .7s ease-in-out infinite alternate}.is-recording .waveform i:nth-child(3n){animation-delay:-.25s}.is-recording .waveform i:nth-child(2n){animation-delay:-.5s}@keyframes wave{to{transform:scaleY(.3)}}.record-foot{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}.record-card .import-btn{width:100%;margin-top:15px;font-size:12px}.track-card{padding:14px}.section-title{font-size:12px;font-weight:750;margin:0 0 12px;display:flex;justify-content:space-between;align-items:center}.track-item{display:flex;gap:10px;padding:12px 10px;border-radius:11px;margin-top:6px;border:1px solid var(--line);align-items:center;font-size:12px}.track-item.selected{border-color:#c5d2f1;background:#f5f7fe}.track-icon{width:30px;height:32px;border-radius:8px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center}.track-icon.left{background:var(--green-soft);color:var(--green)}.track-name{font-weight:650;display:block}.track-meta{font-size:10px;color:var(--muted);margin-top:3px}.rail-note{font-size:11px;color:var(--muted);line-height:1.8;padding:0 4px}.score-panel{min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}.score-top{padding:14px 20px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);min-height:68px}.score-top h2{font-size:15px;margin:0;letter-spacing:-.5px}.score-top .meta{font-size:11px;color:var(--muted);margin-top:4px}.view-controls{margin-left:auto;display:flex;gap:6px}.score-info{padding:12px 20px 0;display:flex;gap:10px;justify-content:space-between;align-items:center;min-height:34px;font-size:10px;color:var(--muted)}.hand-legend{display:flex;gap:12px;font-size:11px;white-space:nowrap}.hand-legend span{display:inline-flex;align-items:center;gap:5px}.right-color{color:var(--blue)}.left-color{color:var(--green)}.score-area{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;padding:12px 16px 8px;scrollbar-width:thin}.score-page{width:100%;margin:auto;background:white}.score-page svg{display:block;width:100%;height:auto}.score-caption{text-align:center;font-size:11px;color:var(--muted);line-height:1.5;margin:4px 0 18px}.score-bottom{border-top:1px solid var(--line);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:59px}.pager{display:flex;gap:7px;align-items:center;font-size:11px;font-variant-numeric:tabular-nums}.pager .icon-btn{width:38px}.score-bottom .edit-open{font-size:12px}.right-rail{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:14px}.options-card{padding:18px}.options-card label{display:flex;flex-direction:column;gap:7px;font-size:11px;color:var(--muted);margin-bottom:14px}.options-card select{font-size:12px;width:100%;padding:0 9px}.options-card .hint{font-size:11px;line-height:1.75;color:var(--muted);margin:0}.option-buttons{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}.option-buttons button{font-size:11px;flex:1;padding:8px 7px}.review-box{display:flex;flex-direction:column;gap:8px;padding:16px}.review-box strong{font-size:12px}.review-box p{font-size:11px;line-height:1.8;color:var(--muted);margin:0}.review-box button{font-size:12px}.demo-note{padding:12px 16px;border:1px dashed #d8d6c5;background:#faf9f3;font-size:10px;line-height:1.9;color:#7b7154;border-radius:12px}
+.transport{display:flex;align-items:center;gap:14px;padding:12px 24px;background:white;border-top:1px solid var(--line);min-height:87px;z-index:3}.transport-main{display:flex;gap:8px}.transport-main button{min-width:112px;min-height:48px;font-size:13px}.seek-group{flex:1;display:flex;flex-direction:column;gap:3px;min-width:80px}.seek-group .times{display:flex;justify-content:space-between;font-size:10px;font-variant-numeric:tabular-nums;color:var(--muted)}input[type=range]{appearance:none;height:5px;min-height:24px;border:0;border-radius:0;background:transparent;width:100%;margin:0;cursor:pointer}input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:#e3e8f3}input[type=range]::-webkit-slider-thumb{appearance:none;background:var(--blue);border-radius:50%;width:12px;height:12px;margin-top:-4px}input[type=range]::-moz-range-track{height:4px;background:#e3e8f3}input[type=range]::-moz-range-thumb{background:var(--blue);border:0;border-radius:50%;height:12px;width:12px}.transport-extra{display:flex;gap:10px;align-items:center}.speed-control{font-size:12px;background:#f5f7fb;padding:0 7px;border:1px solid var(--line)}.status-text{font-size:11px;color:var(--muted);white-space:nowrap}.app-head .mobile-edit{display:none}
+/* Layout follows usable viewport space, not an iPhone/iPad model name. */
+[data-layout=tablet-landscape] .workspace{grid-template-columns:210px minmax(0,1fr);padding:16px;gap:14px}[data-layout=tablet-landscape] .right-rail{display:none}[data-layout=tablet-landscape] .app-head{padding:0 18px;height:64px}[data-layout=tablet-landscape] .transport{padding:12px 18px}[data-layout=tablet-landscape] .record-card{padding:17px}
+[data-layout=tablet-portrait] .workspace{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);padding:18px;gap:16px}[data-layout=tablet-portrait] .left-rail{overflow:visible}[data-layout=tablet-portrait] .record-card{display:grid;grid-template-columns:1fr 210px;column-gap:24px;align-items:center;padding:17px 21px}[data-layout=tablet-portrait] .record-intro{grid-row:1/5}[data-layout=tablet-portrait] .record-card .record-status{margin-top:0}[data-layout=tablet-portrait] .record-card .waveform{height:30px;margin:8px 0 4px}[data-layout=tablet-portrait] .import-btn,[data-layout=tablet-portrait] .track-card,[data-layout=tablet-portrait] .rail-note,[data-layout=tablet-portrait] .right-rail{display:none}[data-layout=tablet-portrait] .transport{padding:12px 18px;gap:12px}[data-layout=tablet-portrait] .transport-main button{min-width:110px}[data-layout=tablet-portrait] .transport-extra{display:none}[data-layout=tablet-portrait] .score-area{padding:20px 28px}
+[data-layout^=phone] .app-head{height:54px;padding:0 14px;gap:8px}[data-layout^=phone] .brand{font-size:15px;gap:7px}[data-layout^=phone] .brand-mark{width:29px;height:31px;padding:6px 4px}[data-layout^=phone] .head-song{display:none}[data-layout^=phone] .head-right{margin-left:auto;gap:3px}[data-layout^=phone] .head-right>.save-status,[data-layout^=phone] .head-right>.head-edit{display:none}[data-layout^=phone] .demo-chip{font-size:9px;padding:4px 6px}[data-layout^=phone] .head-right .icon-btn{width:40px}[data-layout^=phone] .workspace{padding:12px;gap:12px;grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}[data-layout^=phone] .left-rail{overflow:visible;min-height:auto}[data-layout^=phone] .record-card{padding:12px 14px;display:grid;grid-template-columns:1fr 95px;column-gap:10px;align-items:center;border-radius:14px}[data-layout^=phone] .record-intro{grid-row:1/4}[data-layout^=phone] .eyebrow{font-size:8px;margin-bottom:4px}[data-layout^=phone] .record-card h1{font-size:17px;margin:0 0 4px}[data-layout^=phone] .record-card p{font-size:10px;line-height:1.6}[data-layout^=phone] .record-card .record-status{margin:0;font-size:9px;gap:4px}[data-layout^=phone] .record-card .record-clock{font-size:17px}[data-layout^=phone] .waveform{margin:6px 0 2px;height:25px;gap:2px}[data-layout^=phone] .record-foot{font-size:8px;gap:3px}[data-layout^=phone] .import-btn,[data-layout^=phone] .track-card,[data-layout^=phone] .rail-note,[data-layout^=phone] .right-rail{display:none}[data-layout^=phone] .score-panel{border-radius:14px}[data-layout^=phone] .score-top{padding:10px 12px;min-height:62px}[data-layout^=phone] .score-top h2{font-size:14px}[data-layout^=phone] .score-top .meta{font-size:10px}[data-layout^=phone] .view-controls button{font-size:11px;padding:6px 9px}[data-layout^=phone] .score-info{padding:9px 12px 0;min-height:28px;gap:6px}[data-layout^=phone] .score-info>.source-label{font-size:9px}[data-layout^=phone] .hand-legend{font-size:9px;gap:7px}[data-layout^=phone] .score-area{padding:7px 4px;overflow:auto}[data-layout^=phone] .score-caption{display:none}[data-layout^=phone] .score-bottom{padding:5px 9px;min-height:55px}[data-layout^=phone] .score-bottom .edit-open{font-size:11px;min-height:42px;padding:6px 9px}[data-layout^=phone] .pager{font-size:10px;gap:0}[data-layout^=phone] .transport{display:grid;grid-template-columns:1fr;gap:3px;padding:7px 12px 9px;min-height:94px}[data-layout^=phone] .transport-main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;grid-row:2}[data-layout^=phone] .transport-main button{font-size:12px;min-width:0;min-height:46px;padding:6px}[data-layout^=phone] .transport-main .icon{width:16px;height:16px}[data-layout^=phone] .seek-group{display:grid;grid-template-columns:31px 1fr 31px;gap:8px;align-items:center;grid-row:1}[data-layout^=phone] .seek-group .times{display:contents}[data-layout^=phone] .seek-group .times span:first-child{grid-column:1;grid-row:1}[data-layout^=phone] .seek-group .times span:last-child{grid-column:3;grid-row:1;text-align:right}[data-layout^=phone] .seek-group input{grid-column:2;grid-row:1}[data-layout^=phone] .transport-extra{display:none}
+[data-layout=phone-landscape] .app-head{height:46px}[data-layout=phone-landscape] .workspace{grid-template-columns:185px minmax(0,1fr);grid-template-rows:minmax(0,1fr);padding:8px 12px;gap:10px}[data-layout=phone-landscape] .record-card{display:block;height:100%;padding:13px}[data-layout=phone-landscape] .left-rail{height:100%}[data-layout=phone-landscape] .record-intro p{font-size:10px}[data-layout=phone-landscape] .record-status{margin-top:13px!important}[data-layout=phone-landscape] .record-clock{font-size:23px!important}[data-layout=phone-landscape] .record-card .waveform{height:24px;margin-top:12px}[data-layout=phone-landscape] .score-top{min-height:46px;padding:5px 11px}[data-layout=phone-landscape] .score-top .meta{display:none}[data-layout=phone-landscape] .score-info{display:none}[data-layout=phone-landscape] .score-area{padding:0 3px}[data-layout=phone-landscape] #homeScore{height:100%}[data-layout=phone-landscape] #homeScore svg{height:100%;width:100%}[data-layout=phone-landscape] .score-bottom{min-height:43px;padding:0 8px}[data-layout=phone-landscape] .score-bottom button{min-height:40px}[data-layout=phone-landscape] .transport{display:flex;min-height:65px;padding:8px 12px;gap:15px}[data-layout=phone-landscape] .transport-main{display:flex;order:2}[data-layout=phone-landscape] .transport-main button{min-width:110px;min-height:44px}[data-layout=phone-landscape] .seek-group{order:1}
+/* Full-viewport editor: same document, no new tab, no audio/model remount. */
+dialog{color:var(--ink);border:0;padding:0}dialog::backdrop{background:#18243866;backdrop-filter:blur(3px)}.editor-dialog{position:fixed;inset:0;margin:0;width:100%;max-width:none;height:100vh;height:var(--app-height);max-height:none;background:var(--bg);overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}.editor-dialog[open]{display:grid;grid-template-rows:58px 53px minmax(0,1fr) auto}.edit-head{display:flex;align-items:center;gap:12px;padding:0 20px;background:white;border-bottom:1px solid var(--line)}.edit-title strong{display:block;font-size:14px}.edit-title small{font-size:10px;color:var(--muted)}.edit-head .apply-btn{margin-left:auto;min-width:80px}.dirty-chip{font-size:10px;color:var(--muted)}.edit-toolbar{padding:0 20px;display:flex;align-items:center;gap:8px;background:white;border-bottom:1px solid var(--line);overflow:auto;scrollbar-width:none}.segmented{display:flex;padding:3px;background:#f0f3f9;border-radius:10px;gap:2px;flex-shrink:0}.segmented button{min-height:36px;font-size:11px;padding:7px 12px;border:0;background:transparent;border-radius:8px}.segmented button.active{background:white;box-shadow:0 1px 4px #24375315;color:var(--blue)}.edit-toolbar .tool-actions{display:flex;gap:3px}.edit-toolbar .tool-actions button{border:0}.toolbar-label{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;margin-left:auto;white-space:nowrap}.toolbar-label select{font-size:11px;min-height:36px;padding:0 8px}.edit-body{display:grid;grid-template-columns:180px minmax(0,1fr) 220px;gap:12px;padding:12px;min-height:0;overflow:hidden}.edit-left{overflow:auto;padding:15px 12px}.edit-center{min-width:0;min-height:0;display:grid;grid-template-rows:minmax(160px,42%) 9px minmax(0,1fr);overflow:hidden;gap:0}.edit-sheet-pane{display:flex;flex-direction:column;min-height:0;overflow:hidden}.pane-heading{display:flex;gap:10px;align-items:center;font-size:11px;font-weight:700;padding:9px 12px;border-bottom:1px solid var(--line);min-height:40px}.pane-heading span{margin-left:auto;font-size:10px;font-weight:400;color:var(--muted)}.edit-sheet-scroll{min-height:0;overflow:auto;padding:4px 12px;flex:1;scrollbar-width:thin}.split-handle{display:flex;align-items:center;justify-content:center;cursor:row-resize;touch-action:none}.split-handle:after{content:"";height:3px;width:34px;border-radius:4px;background:#c4ccda}.edit-roll-pane{min-height:0;display:flex;flex-direction:column;overflow:hidden}.roll-scroll{flex:1;min-height:0;overflow:auto;position:relative;overscroll-behavior:contain;scrollbar-width:thin}.roll-canvas{position:relative;background:#fdfdff;isolation:isolate}.key-row{position:absolute;left:0;right:0;border-bottom:1px solid #ebeff6;pointer-events:none}.key-row.black{background:#f3f5fa}.key-label{position:sticky;left:0;top:auto;width:50px;height:100%;background:rgba(255,255,255,.97);border-right:1px solid #cdd5e3;font-size:9px;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;color:#78849a;z-index:4;pointer-events:none}.key-row.black .key-label{background:#e9eef6}.bar-line{position:absolute;top:27px;bottom:0;border-left:1px solid #ccd7ec;pointer-events:none;z-index:0}.beat-line{position:absolute;top:27px;bottom:0;border-left:1px solid #e7ecf5;pointer-events:none}.roll-ruler{height:27px;background:#f8faff;border-bottom:1px solid #d5deee;position:sticky;top:0;z-index:5;font-size:10px;color:#667792;pointer-events:none}.roll-ruler span{position:absolute;top:6px}.roll-note{position:absolute;height:18px;min-height:18px;padding:0 5px;display:flex;justify-content:flex-start;gap:3px;min-width:12px;border-radius:5px;color:white;background:var(--blue);border:1px solid #294faa;font-size:9px;font-weight:550;overflow:visible;z-index:2;touch-action:none;cursor:grab;white-space:nowrap}.roll-note.left{background:var(--green);border-color:#116a61}.roll-note:hover{background:#244aae!important}.roll-note.left:hover{background:#136e64!important}.roll-note.selected{outline:2px solid #1e2b47;outline-offset:2px;z-index:3}.roll-note .resize-grip{position:absolute;right:0;top:0;height:100%;width:12px;cursor:ew-resize;border-right:3px solid #ffffff66;border-radius:0 5px 5px 0;touch-action:none}.roll-playhead{position:absolute;top:27px;bottom:0;width:2px;background:#e8496388;pointer-events:none;z-index:4}.edit-inspector{padding:16px;overflow:auto}.edit-inspector h3{font-size:12px;margin:0 0 15px}.selection-name{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.selection-name strong{font-size:25px;font-weight:700}.selection-name small{font-size:11px;color:var(--muted)}.inspector-label{font-size:11px;display:block;color:var(--muted);margin:14px 0 7px}.hand-picker{display:flex;gap:5px}.hand-picker button{flex:1;padding:8px;font-size:11px}.stepper{display:flex;gap:4px;align-items:center}.stepper span{flex:1;text-align:center;font-size:12px}.stepper button{width:40px;padding:0}.edit-inspector .delete-btn{margin-top:20px;width:100%;font-size:12px;color:var(--red);background:#fff6f7;border-color:#f3d9df}.inspector-hint{font-size:10px;line-height:1.85;color:var(--muted);margin-top:16px}.edit-foot{display:flex;align-items:center;gap:10px;padding:9px 18px;background:white;border-top:1px solid var(--line);min-height:66px}.edit-foot .mini-transport{display:flex;gap:6px;align-items:center}.edit-foot .foot-hint{margin-left:auto;color:var(--muted);font-size:11px}.mobile-properties{display:none}.edit-body[data-view=score] .edit-center{grid-template-rows:minmax(0,1fr)}.edit-body[data-view=score] .edit-roll-pane,.edit-body[data-view=score] .split-handle{display:none}.edit-body[data-view=roll] .edit-center{grid-template-rows:minmax(0,1fr)}.edit-body[data-view=roll] .edit-sheet-pane,.edit-body[data-view=roll] .split-handle{display:none}.roll-note[hidden]{display:none}
+[data-layout=tablet-landscape] .edit-body{grid-template-columns:156px minmax(0,1fr) 188px;gap:10px;padding:10px}[data-layout=tablet-portrait] .edit-body{grid-template-columns:minmax(0,1fr);padding:14px}[data-layout=tablet-portrait] .edit-left,[data-layout=tablet-portrait] .edit-inspector{display:none}[data-layout=tablet-portrait] .mobile-properties{display:flex;gap:10px;align-items:center;flex:1;justify-content:flex-end}[data-layout=tablet-portrait] .edit-foot .foot-hint{display:none}
+[data-layout^=phone] .editor-dialog[open]{grid-template-rows:54px 51px minmax(0,1fr) auto}[data-layout^=phone] .edit-head{padding:0 10px;gap:8px}[data-layout^=phone] .edit-title strong{font-size:13px}[data-layout^=phone] .edit-title small{font-size:9px}[data-layout^=phone] .dirty-chip{display:none}[data-layout^=phone] .edit-head .apply-btn{min-width:67px;font-size:12px}[data-layout^=phone] .edit-toolbar{padding:0 9px;gap:4px;justify-content:space-between}[data-layout^=phone] .segmented button{padding:7px 11px;font-size:11px;min-height:38px}[data-layout^=phone] .edit-toolbar .tool-actions{gap:0}[data-layout^=phone] .edit-toolbar .tool-actions button{width:39px}[data-layout^=phone] .toolbar-label{display:none}[data-layout^=phone] .split-view-button{display:none}[data-layout^=phone] .edit-body{grid-template-columns:minmax(0,1fr);padding:8px;gap:0}[data-layout^=phone] .edit-center{grid-template-rows:minmax(0,1fr)}[data-layout^=phone] .edit-left,[data-layout^=phone] .edit-inspector{display:none}[data-layout^=phone] .pane-heading{font-size:10px;padding:7px 10px;min-height:36px}[data-layout^=phone] .pane-heading span{font-size:9px}[data-layout^=phone] .edit-sheet-scroll{padding:6px 0}[data-layout^=phone] .edit-foot{flex-direction:column;align-items:stretch;padding:8px 10px;gap:6px;min-height:110px}[data-layout^=phone] .edit-foot .foot-hint{display:none}[data-layout^=phone] .mobile-properties{display:flex;align-items:center;gap:5px;justify-content:space-between;order:1}[data-layout^=phone] .mini-transport{order:2;justify-content:space-between}[data-layout^=phone] .mini-transport button{font-size:11px;min-height:42px}[data-layout^=phone] .mobile-properties button{font-size:11px;padding:7px 9px;min-height:42px}[data-layout^=phone] .mobile-properties .note-name{font-size:11px;font-weight:700;min-width:31px}[data-layout^=phone] .mobile-properties .pitch-buttons{display:flex;gap:2px}[data-layout^=phone] .mobile-properties .pitch-buttons button{width:36px;padding:0}[data-layout^=phone] .mobile-properties .mobile-delete{width:38px;padding:0}[data-layout^=phone] .mini-time{font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted)}
+[data-layout=phone-landscape] .editor-dialog[open]{grid-template-rows:48px 48px minmax(0,1fr) 57px}[data-layout=phone-landscape] .edit-foot{flex-direction:row;min-height:57px;padding:5px 12px;gap:18px}[data-layout=phone-landscape] .mini-transport{order:1;flex-shrink:0;gap:8px}[data-layout=phone-landscape] .mobile-properties{order:2;flex:1;justify-content:flex-end;gap:7px}[data-layout=phone-landscape] .edit-body{padding:5px 10px}[data-layout=phone-landscape] .pane-heading{display:none}
+.settings-dialog{width:min(460px,calc(100vw - 26px));max-height:calc(100dvh - 40px);margin:auto;border-radius:20px;overflow:auto;background:white;padding:22px}.settings-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.settings-head h2{margin:0;font-size:18px}.settings-dialog p{font-size:12px;line-height:1.85;color:var(--muted)}.settings-grid{display:grid;gap:9px;margin-top:18px}.settings-grid button{justify-content:flex-start;font-size:12px}.settings-dialog hr{border:0;border-top:1px solid var(--line);margin:17px 0}.toast{position:fixed;bottom:calc(112px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#202c45;color:white;padding:11px 16px;border-radius:12px;max-width:min(90vw,500px);font-size:12px;line-height:1.65;box-shadow:0 4px 25px #18284222;z-index:100;pointer-events:none;opacity:0;transition:opacity .15s}.toast.show{opacity:1}dialog .toast{position:absolute}.generation-line{height:3px;background:#dbe4fb;position:relative;overflow:hidden}.generation-line:after{content:"";display:block;height:100%;width:25%;background:var(--blue);animation:loading 1s infinite}@keyframes loading{from{transform:translateX(-100%)}to{transform:translateX(500%)}}[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media(max-height:640px) and (orientation:portrait){[data-layout^=phone] .workspace{padding:8px;gap:8px}[data-layout^=phone] .record-card{padding:9px 12px}[data-layout^=phone] .record-intro p{display:none}[data-layout^=phone] .score-info{display:none}[data-layout^=phone] .score-top{min-height:52px}[data-layout^=phone] .score-bottom{min-height:48px}[data-layout^=phone] .transport{min-height:89px}}
+@media(pointer:coarse){.roll-note:before{content:"";position:absolute;inset:-2px 0;pointer-events:auto}.roll-note .resize-grip{width:16px}.split-handle{height:9px}}
+
+/* All screen surfaces follow the selected theme; exported paper stays white. */
+:root{--surface2:#f1f4fa;--primary:#375ac5;--primary-hover:#294cac;--record-bg:#d13b53;--right-fill:#375ac5;--left-fill:#178479;--score-bg:#fff;--score-ink:#253047;--score-line:#8d97a9;--roll-grid:#ebeff6;--roll-bar:#ccd7ec;--roll-black:#f3f5fa;--selection:#e7ecfa;--warn-bg:#faf4de;--warn-ink:#705e26}
+:root[data-theme=dark]{--bg:#101521;--surface:#182131;--surface2:#202b3e;--ink:#e9effa;--muted:#a4b2c9;--line:#344259;--blue:#a3b7ff;--blue-soft:#263553;--primary:#4768d6;--primary-hover:#5275eb;--red:#ff93a5;--record-bg:#bd324c;--green:#74d4bd;--green-soft:#193b39;--right-fill:#3c5cad;--left-fill:#16786c;--score-bg:#182131;--score-ink:#dbe4f3;--score-line:#6e7e97;--roll-grid:#2b354a;--roll-bar:#4c5d78;--roll-black:#202b3e;--selection:#314665;--warn-bg:#3a3222;--warn-ink:#e7cd83;--shadow:0 8px 28px #0002;color-scheme:dark}
+:root[data-theme=light]{color-scheme:light}
+body{background:var(--bg)}button,input,select,dialog,.transport,.edit-head,.edit-toolbar,.edit-foot,.settings-dialog{background:var(--surface)}
+button:hover:not(:disabled){background:var(--surface2)}button.primary{background:var(--primary);border-color:var(--primary);color:#fff}button.primary:hover{background:var(--primary-hover)}button.record{background:var(--record-bg);border-color:var(--record-bg);color:#fff}
+button.active,button[aria-pressed=true].toggle{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.chip,.speed-control,.segmented{background:var(--surface2)}.chip.blue{background:var(--blue-soft)}.chip.green{background:var(--green-soft)}.demo-chip{background:var(--warn-bg);color:var(--warn-ink)}
+.brand-mark{background:var(--primary)}.brand-mark i:not(:last-child):after{background:var(--primary);border-color:var(--primary)}
+.track-item.selected{background:var(--blue-soft);border-color:var(--line)}.waveform i{background:var(--line)}.demo-note{background:var(--warn-bg);color:var(--warn-ink);border-color:var(--line)}
+.score-page{background:var(--score-bg)}.segmented button.active{background:var(--surface);color:var(--blue)}.roll-canvas{background:var(--surface)}.key-row{border-color:var(--roll-grid)}.key-row.black{background:var(--roll-black)}.key-label{background:var(--surface);border-color:var(--line);color:var(--muted)}.key-row.black .key-label{background:var(--roll-black)}.bar-line{border-color:var(--roll-bar)}.beat-line{border-color:var(--roll-grid)}.roll-ruler{background:var(--surface2);color:var(--muted);border-color:var(--line)}
+.roll-note{background:var(--right-fill);border-color:var(--blue);color:white}.roll-note.left{background:var(--left-fill);border-color:var(--green)}.roll-note.selected{outline-color:var(--ink)}
+.edit-inspector .delete-btn{background:var(--surface2);color:var(--red);border-color:var(--line)}.split-handle:after{background:var(--muted)}
+input[type=range]::-webkit-slider-runnable-track{background:var(--line)}input[type=range]::-moz-range-track{background:var(--line)}
+input[type=checkbox]{accent-color:var(--primary);min-height:18px;width:18px;height:18px}
+.theme-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:12px 0 8px}.theme-options button{font-size:12px;padding:9px 5px}.theme-note{margin:0!important;font-size:11px!important}.theme-heading{font-size:13px;font-weight:750;margin:16px 0 4px}
+.metro-settings{font-variant-numeric:tabular-nums;gap:5px;min-width:70px}.metro-settings.running{color:var(--blue);border-color:var(--blue)}
+.metro-quick{background:var(--surface);position:relative}.metro-quick[aria-pressed=true]{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.transport-main button{min-width:102px}.metro-quick .icon{width:18px}
+.metronome-dialog{width:min(500px,calc(100vw - 24px));max-height:calc(100dvh - 24px);margin:auto;padding:0;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);box-shadow:0 20px 80px #0004}
+.metronome-dialog[open]{display:flex;flex-direction:column}.metro-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-shrink:0}.metro-head h2{font-size:18px;margin:0}.metro-head p{font-size:11px;color:var(--muted);margin:4px 0 0}.metro-head .icon-btn{margin-left:auto}
+.metro-content{overflow:auto;overscroll-behavior:contain;padding:18px 20px;min-height:0;display:flex;flex-direction:column;gap:14px}.metro-primary{display:flex;flex-direction:column;gap:12px}.metro-dots{display:flex;justify-content:center;gap:10px;align-items:center;height:25px}.metro-dots i{width:14px;height:14px;border:2px solid var(--line);border-radius:50%}.metro-dots i.strong{width:22px;height:22px}.metro-dots i.mid{width:18px;height:18px}.metro-dots i.lit{background:var(--blue);border-color:var(--blue)}.metro-dots i.strong.lit{background:var(--red);border-color:var(--red)}
+.metro-tempo{display:flex;align-items:center;justify-content:space-between;gap:6px}.metro-tempo button{min-width:42px;padding:5px}.metro-number{text-align:center;flex:1;min-width:90px}.metro-number input{width:120px;max-width:100%;font-size:52px;font-weight:760;letter-spacing:-2px;text-align:center;font-variant-numeric:tabular-nums;border:0;min-height:64px;padding:0;background:transparent;appearance:textfield}.metro-number input::-webkit-inner-spin-button{-webkit-appearance:none}.metro-number small{display:block;color:var(--muted);font-size:11px}.metro-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.metro-grid label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted)}.metro-grid select{width:100%;padding:0 7px;font-size:12px}.metro-grid .checkbox-label{flex-direction:row;align-items:center;gap:6px;min-height:30px}.metro-grid button{font-size:12px}.metro-help{color:var(--muted);font-size:11px;line-height:1.75;margin:0}.metro-song-actions{display:flex;gap:7px;flex-wrap:wrap}.metro-song-actions button{font-size:11px;flex:1}.metro-footer{display:flex;align-items:center;gap:12px;padding:12px 20px;border-top:1px solid var(--line);background:var(--surface);flex-shrink:0}.metro-footer .metro-quick{min-height:50px;min-width:126px;font-size:15px}.metro-footer .metro-status{font-size:11px;color:var(--muted);line-height:1.6}
+.metro-access-editor{min-width:40px;padding:8px!important}.feature-details{margin-top:14px;font-size:12px}.feature-details summary{cursor:pointer;color:var(--blue);padding:10px 0}.feature-details p{font-size:11px!important}.feature-details ul{padding-left:18px;line-height:1.8;color:var(--muted);margin-top:6px}
+[data-layout^=phone] .transport-main{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}[data-layout^=phone] .transport-main button{min-width:0;min-height:53px;flex-direction:column;gap:3px;font-size:11px;padding:5px 2px}
+[data-layout^=phone] .head-right>.demo-chip{display:none}[data-layout^=phone] .metro-settings{min-width:64px;min-height:40px;padding:7px 9px;font-size:12px}[data-layout^=phone] .head-right{gap:6px}[data-layout^=phone] .mini-transport{gap:5px}[data-layout^=phone] .mini-time{font-size:10px}
+[data-layout=phone-landscape] .transport-main{display:flex;gap:6px}[data-layout=phone-landscape] .transport-main button{min-width:73px;min-height:44px;flex-direction:row;font-size:10px;padding:5px 7px;gap:4px}[data-layout=phone-landscape] .transport{gap:10px}[data-layout=phone-landscape] .edit-foot{gap:10px}[data-layout=phone-landscape] .mini-time{display:none}
+@media(max-width:374px){.metro-content{padding:14px}.metro-head{padding:12px 14px}.metro-footer{padding:10px 14px}.metro-tempo button{min-width:35px}.metro-number input{font-size:46px;width:104px}.metro-grid{gap:10px}.metro-settings{font-size:11px}.mini-transport #editorStart{padding:6px!important}}
+@media(max-height:520px) and (orientation:landscape){.metronome-dialog{width:min(780px,calc(100vw - 24px))}.metro-head{padding:8px 15px}.metro-head p{display:none}.metro-content{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 16px}.metro-primary{gap:8px}.metro-grid{gap:7px}.metro-help{grid-column:1/-1}.metro-song-actions{grid-column:1/-1}.metro-number input{font-size:42px;min-height:49px}.metro-footer{padding:8px 16px}.metro-footer .metro-quick{min-height:44px}.metro-head h2{font-size:16px}.metro-tempo button{min-width:34px}}
+@media print{:root,:root[data-theme=dark]{--score-bg:#fff;--score-ink:#111;--score-line:#777;--blue:#223c9c;--green:#176252}.score-page{background:white!important}}
+
+</style>
+</head>
+<body data-layout="desktop">
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"><defs>
+<symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 4v16M17 4v16" stroke-width="5"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-score" viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 11h8M8 14h5M8 17h4"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="m4 16-1 5 5-1L20 8l-4-4zM14 6l4 4"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></symbol>
+<symbol id="i-left" viewBox="0 0 24 24"><path d="m14 5-7 7 7 7"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="m10 5 7 7-7 7"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+<symbol id="i-undo" viewBox="0 0 24 24"><path d="M8 4 3 9l5 5M3 9h11a6 6 0 0 1 0 12"/></symbol>
+<symbol id="i-redo" viewBox="0 0 24 24"><path d="m16 4 5 5-5 5m5-5H10a6 6 0 0 0 0 12"/></symbol>
+<symbol id="i-delete" viewBox="0 0 24 24"><path d="M3 6h18M8 6V3h8v3M6 6l1 15h10l1-15M10 10v7M14 10v7"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6"/></symbol>
+<symbol id="i-reset" viewBox="0 0 24 24"><path d="M5 5v5h5M5 10a8 8 0 1 1 0 7"/></symbol>
+<symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 13V11a8 8 0 0 1 16 0v2"/><rect x="3" y="12" width="5" height="9" rx="2"/><rect x="16" y="12" width="5" height="9" rx="2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
+<symbol id="i-metro" viewBox="0 0 24 24"><path d="M7 21h10L15 3H9zM12 17l6-10M9 17h6"/></symbol></defs></svg>
+<div class="app" id="app">
+<header class="app-head">
+ <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>우리집 연주실 2</div>
+ <div class="head-song"><strong>작은 연습곡</strong><span class="small muted">피아노 · 8마디 · 예제 프로젝트</span></div>
+ <div class="head-right"><span class="chip demo-chip">UI 시안 · 예제 데이터</span><span class="chip save-status" id="saveStatus">원본 앱과 별개</span><button class="metro-settings" id="metroSettingsButton" data-metro-open aria-label="메트로놈 설정"><svg class="icon"><use href="#i-metro"/></svg><b data-metro-bpm>96</b></button><button class="head-edit" data-open-editor><svg class="icon"><use href="#i-edit"/></svg>집중 편집</button><button class="icon-btn flat" id="moreButton" aria-label="추가 메뉴"><svg class="icon"><use href="#i-more"/></svg></button></div>
+</header>
+<main class="workspace" id="workspace">
+ <aside class="left-rail">
+  <section class="record-card card" id="recordCard" aria-label="녹음 상태 시연">
+   <div class="record-intro"><div class="eyebrow">PLAY. CAPTURE. PRACTICE.</div><h1>연주를 악보로.</h1><p>녹음하고, 악보를 확인하고,<br>다시 들으며 연습해 보세요.</p></div>
+   <div class="record-status"><span class="dot"></span><span id="recordStatus">시연 준비</span><span class="record-clock" id="recordTime">00:00</span></div>
+   <div class="waveform" id="waveform" aria-hidden="true"></div>
+   <div class="record-foot"><span>실제 마이크 사용 안 함</span><span>시연</span></div>
+   <button class="import-btn" data-open-menu><svg class="icon"><use href="#i-upload"/></svg>불러오기 · 더 보기</button>
+  </section>
+  <section class="track-card card"><h2 class="section-title">연주 트랙 <span class="small muted">1</span></h2><div class="track-item selected"><span class="track-icon"><svg class="icon"><use href="#i-score"/></svg></span><div><span class="track-name">피아노 연습곡</span><div class="track-meta">원형 유지 · 양손 표시</div></div></div><div class="track-item"><span class="dot right-color"></span><span class="grow">오른손</span><span id="rightCount" class="tiny muted">32음</span></div><div class="track-item"><span class="dot left-color"></span><span class="grow">왼손</span><span id="leftCount" class="tiny muted">8음</span></div></section>
+  <div class="rail-note">녹음 설정과 편곡은 필요할 때만.<br>자주 쓰는 버튼은 항상 아래에 있어요.</div>
+ </aside>
+ <section class="score-panel card" aria-label="악보 보기">
+  <div class="score-top"><div><h2>작은 연습곡</h2><div class="meta">다장조 · 4/4 · ♩ = <span id="songBpm">96</span></div></div><div class="view-controls"><button class="toggle" id="handsToggle" aria-pressed="true">양손 표시</button></div></div>
+  <div class="generation-line" id="generationLine" hidden></div>
+  <div class="score-info"><span class="source-label" id="scoreSource">직접 만든 예제 악보</span><div class="hand-legend"><span class="right-color"><i class="dot"></i>오른손</span><span class="left-color"><i class="dot"></i>왼손</span></div></div>
+  <div class="score-area" id="homeScoreArea" tabindex="0" aria-label="악보 내용. 내부 스크롤 가능"><div class="score-page" id="homeScore"></div><div class="score-caption">악보를 보면서 재생하거나, 필요한 부분만 편집해 보세요.</div></div>
+  <div class="score-bottom"><div class="pager"><button class="icon-btn flat" id="prevPage" aria-label="이전 악보 구간"><svg class="icon"><use href="#i-left"/></svg></button><span id="pageLabel">1–4 / 8마디</span><button class="icon-btn flat" id="nextPage" aria-label="다음 악보 구간"><svg class="icon"><use href="#i-right"/></svg></button></div><button class="edit-open" data-open-editor><svg class="icon"><use href="#i-edit"/></svg>전체 화면 편집</button></div>
+ </section>
+ <aside class="right-rail">
+  <section class="options-card card"><h2 class="section-title">연습에 맞게 보기</h2><label>표시 악기<select id="outputSelect"><option value="piano">피아노 · 양손 악보</option><option value="guitar">기타 코드 · UI 계획 보기</option></select></label><span class="inspector-label">듣고 싶은 손</span><div class="option-buttons" id="listenHands"><button class="active" data-hand-listen="both">양손</button><button data-hand-listen="L">왼손</button><button data-hand-listen="R">오른손</button></div><p class="hint">편집할 때는 손 구분과 음 길이를<br>악보 옆에서 바로 바꿀 수 있어요.</p></section>
+  <section class="review-box card"><strong>고치는 시간은 짧게.</strong><p>음을 선택해 손을 바꾸고,<br>되돌리기로 전후를 비교하세요.</p><button data-open-editor>집중 편집 열기<svg class="icon"><use href="#i-right"/></svg></button></section>
+  <div class="demo-note">이 파일은 화면·조작 검토용입니다.<br>AI 채보·마이크 녹음·실제 기타 편곡은 연결되어 있지 않습니다.</div>
+ </aside>
+</main>
+<footer class="transport" aria-label="주요 작업. 항상 표시">
+ <div class="transport-main"><button class="record" id="recordButton"><svg class="icon"><use href="#i-mic"/></svg><span>녹음 시연</span></button><button id="generateButton"><svg class="icon"><use href="#i-score"/></svg><span>악보 시연</span></button><button class="primary" id="playButton"><svg class="icon"><use href="#i-play"/></svg><span>예제 재생</span></button><button class="metro-quick" id="metroQuickButton" data-metro-toggle aria-pressed="false"><svg class="icon"><use href="#i-metro"/></svg><span>메트로놈</span></button></div>
+ <div class="seek-group"><div class="times"><span id="positionLabel">00:00</span><span id="durationLabel">00:20</span></div><input type="range" id="seek" min="0" max="32" step=".1" value="0" aria-label="예제 재생 위치"></div>
+ <div class="transport-extra"><select class="speed-control" id="speed" aria-label="예제 재생 속도"><option value="1">1.0×</option><option value=".75">0.75×</option><option value=".5">0.5×</option></select><button class="icon-btn flat" id="listenMenu" aria-label="재생·연습 설정"><svg class="icon"><use href="#i-headphones"/></svg></button></div>
+</footer>
+</div>
+<dialog class="editor-dialog" id="editor" aria-labelledby="editorTitle">
+ <header class="edit-head"><button class="icon-btn flat" id="closeEditor" aria-label="편집 취소하고 닫기"><svg class="icon"><use href="#i-close"/></svg></button><div class="edit-title"><strong id="editorTitle">작은 연습곡 · 집중 편집</strong><small>예제 편집 · 완료를 눌러 반영</small></div><span class="dirty-chip" id="dirtyState">변경 없음</span><button class="primary apply-btn" id="applyEditor"><svg class="icon"><use href="#i-check"/></svg>완료</button></header>
+ <nav class="edit-toolbar" aria-label="편집 도구"><div class="segmented" id="editViews"><button data-view="score">악보</button><button data-view="roll">음표 편집</button><button data-view="split" class="split-view-button active">함께 보기</button></div><div class="tool-actions"><button class="icon-btn" id="undoButton" aria-label="되돌리기" title="Ctrl/Cmd+Z"><svg class="icon"><use href="#i-undo"/></svg></button><button class="icon-btn" id="redoButton" aria-label="다시 실행" title="Ctrl/Cmd+Shift+Z"><svg class="icon"><use href="#i-redo"/></svg></button><button class="icon-btn" id="editorHelp" aria-label="편집 도움말"><svg class="icon"><use href="#i-more"/></svg></button></div><label class="toolbar-label">시간 확대<select id="rollZoom"><option value="50">기본</option><option value="70">확대</option><option value="35">축소</option></select></label></nav>
+ <div class="edit-body" id="editBody" data-view="split">
+  <aside class="edit-left card"><h2 class="section-title">트랙 · 보기</h2><div class="track-item selected"><span class="dot right-color"></span><div><span class="track-name">피아노</span><div class="track-meta">예제 8마디</div></div></div><p class="inspector-hint">오른손 / 왼손은<br>색과 글자로 구분합니다.</p><span class="inspector-label">재생할 손</span><div class="settings-grid"><button data-hand-listen="both">양손 듣기</button><button data-hand-listen="L">왼손만 듣기</button><button data-hand-listen="R">오른손만 듣기</button></div><p class="inspector-hint">넓은 화면에서는 악보와<br>음표 편집을 함께 봅니다.</p></aside>
+  <div class="edit-center" id="editCenter"><section class="edit-sheet-pane card"><div class="pane-heading">악보 미리보기<span>표시 시안 · 전문 조판 아님</span></div><div class="edit-sheet-scroll" id="editSheetScroll"><div class="score-page" id="editScore"></div></div></section><div class="split-handle" id="splitHandle" role="separator" aria-label="악보와 음표 편집 높이 조절" aria-orientation="horizontal" tabindex="0"></div><section class="edit-roll-pane card"><div class="pane-heading">음표 편집<span>빈 곳은 스크롤 · 음을 끌어 이동</span></div><div class="roll-scroll" id="rollScroll" tabindex="0" aria-label="피아노 롤. 음 선택 후 방향키로 이동"><div class="roll-canvas" id="rollCanvas"></div></div></section></div>
+  <aside class="edit-inspector card"><h3>선택한 음</h3><div class="selection-name"><strong id="selectedName">C5</strong><small id="selectedWhen">1마디 · 1박</small></div><span class="inspector-label">연주하는 손</span><div class="hand-picker"><button id="toLeft" data-set-hand="L">왼손</button><button id="toRight" data-set-hand="R">오른손</button></div><span class="inspector-label">음 높이</span><div class="stepper"><button data-pitch="-1" aria-label="반음 내리기">−</button><span id="pitchLabel">C5</span><button data-pitch="1" aria-label="반음 올리기">+</button></div><span class="inspector-label">음 길이</span><div class="stepper"><button data-duration="-.25" aria-label="음 길이 줄이기">−</button><span id="lengthLabel">1박</span><button data-duration=".25" aria-label="음 길이 늘리기">+</button></div><button class="delete-btn" data-delete><svg class="icon"><use href="#i-delete"/></svg>선택한 음 삭제</button><p class="inspector-hint">Shift + 클릭: 여러 음 선택<br>방향키: 음 높이·시작 위치 조정<br>오른쪽 끝 끌기: 길이 조정<br>되돌리기로 언제든 복구</p></aside>
+ </div>
+ <footer class="edit-foot"><div class="mini-transport"><button class="primary" id="editorPlay"><svg class="icon"><use href="#i-play"/></svg>예제 재생</button><span class="mini-time" id="editTime">00:00 / 00:20</span><button class="metro-access-editor" id="editorMetronome" data-metro-open aria-label="메트로놈 설정"><svg class="icon"><use href="#i-metro"/></svg></button><button class="flat" id="editorStart" aria-label="처음부터 재생 준비">처음</button></div><div class="mobile-properties"><span class="note-name" id="mobileNoteName">C5</span><button data-set-hand="L">왼손</button><button data-set-hand="R">오른손</button><div class="pitch-buttons"><button data-pitch="-1" aria-label="반음 내리기">−</button><button data-pitch="1" aria-label="반음 올리기">+</button></div><button class="mobile-delete" data-delete aria-label="선택한 음 삭제"><svg class="icon"><use href="#i-delete"/></svg></button></div><span class="foot-hint">Space 재생 · Ctrl/Cmd+Z 되돌리기 · Esc 취소</span></footer>
+ <div class="toast" id="editorToast" role="status" aria-live="polite"></div>
+</dialog>
+<dialog class="settings-dialog" id="menuDialog" aria-labelledby="menuTitle"><div class="settings-head"><h2 id="menuTitle">연주실 메뉴</h2><button class="icon-btn flat" id="closeMenu" aria-label="메뉴 닫기"><svg class="icon"><use href="#i-close"/></svg></button></div><span class="chip demo-chip">UI 시안 · 실제 앱과 별도</span><div class="theme-heading">화면 모드</div><div class="theme-options" role="group" aria-label="화면 모드"><button data-theme-choice="system">시스템 기본</button><button data-theme-choice="dark" class="active">다크 모드</button><button data-theme-choice="light">일반 모드</button></div><p class="theme-note" id="themeNote">선택한 테마를 기억합니다. 시스템 기본은 기기의 화면 모드를 따릅니다.</p><p id="menuDescription">녹음·악보·재생을 먼저 보여 주고, 덜 사용하는 기능은 이곳에서 엽니다. 이 시안은 마이크에 접근하거나 AI 모델을 내려받지 않습니다.</p><div class="settings-grid"><button data-metro-open><svg class="icon"><use href="#i-metro"/></svg>메트로놈 · 박자와 소리 설정</button><button id="menuOpenEditor"><svg class="icon"><use href="#i-edit"/></svg>전체 화면 편집</button><button id="menuGuitar"><svg class="icon"><use href="#i-score"/></svg>기타 코드·편곡 구현 범위 보기</button><button id="exportDemo"><svg class="icon"><use href="#i-upload"/></svg>예제 편집 JSON 저장</button><button id="resetDemo"><svg class="icon"><use href="#i-reset"/></svg>시안을 처음 상태로 초기화</button></div><hr><label class="inspector-label" for="menuSpeed">예제 재생 속도</label><select id="menuSpeed" style="width:100%;padding:0 10px"><option value="1">1.0배속</option><option value=".75">0.75배속</option><option value=".5">0.5배속</option></select><label class="inspector-label" for="menuHand">예제에서 재생할 손</label><select id="menuHand" style="width:100%;padding:0 10px"><option value="both">양손</option><option value="L">왼손</option><option value="R">오른손</option></select><details class="feature-details"><summary>기존 앱 기능 보존 범위</summary><p>이 파일은 UI 시안입니다. 아래 기능을 삭제하는 대체 앱이 아닙니다. 동봉한 original_addon은 원본 코드를 유지하고 빠른 메트로놈·테마만 덧붙입니다.</p><ul><li>마이크/MIDI 녹음, 원음 보관·듣기·MP3, 파일 불러오기</li><li>트랙·악기·음량·솔로·음소거, 빈 트랙·타이핑 입력</li><li>선택·그리기·삭제·구간·음 길이·옥타브·손 바꾸기, 되돌리기</li><li>박자 찾기·탭 정렬·구간 늘이기·음 보정·양손 나누기</li><li>코드 찾기·왼손 반주·전주·후주, 분석 설정</li><li>곡 저장·복원, MIDI·PNG·SVG·MusicXML·인쇄/PDF</li><li>독립 메트로놈과 녹음/재생용 메트로놈·카운트인</li></ul><p>기능 보존과 인식률·양손 분리·편곡 품질 개선은 별도입니다.</p></details><p class="tiny" id="layoutDescription"></p></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+// Independent UI prototype; no real recording, AI model or source application data.
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const clone=x=>JSON.parse(JSON.stringify(x));
+const STORAGE_KEY='piano-studio-ui-preview-v1';
+const pitchNames=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+const nameOf=p=>pitchNames[(p%12+12)%12]+(Math.floor(p/12)-1);
+const secondsOf=beats=>beats*60/(state.bpm*state.speed);
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+const melody=[[72,74,76,79],[77,76,74,72],[76,77,79,76],[74,71,67,71],[72,76,79,76],[77,74,71,74],[76,74,72,71],[72,67,64,72]];
+function initialNotes(){let a=[];melody.forEach((bar,m)=>{bar.forEach((p,b)=>a.push({id:`r${m}-${b}`,p,b:m*4+b,d:1,h:'R'}));a.push({id:`l${m}`,p:[48,53,57,55,48,53,55,48][m],b:m*4,d:4,h:'L'});});return a;}
+const state={notes:initialNotes(),draft:[],selected:new Set(['r0-0']),history:[],future:[],page:0,showHands:true,recording:false,generating:false,playing:false,position:0,bpm:96,speed:1,listen:'both',layout:'desktop',view:'split',zoom:50,dirty:false};
+try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const x=JSON.parse(raw);if(x.version===1&&Array.isArray(x.notes)&&x.notes.length<=1000&&x.notes.every(n=>typeof n.id==='string'&&/^[a-z0-9-]+$/i.test(n.id)&&Number.isFinite(n.p)&&n.p>=36&&n.p<=84&&Number.isFinite(n.b)&&n.b>=0&&n.b<32&&Number.isFinite(n.d)&&n.d>=.25&&n.b+n.d<=32&&['L','R'].includes(n.h)))state.notes=x.notes;if(Number.isFinite(x.bpm)&&x.bpm>=30&&x.bpm<=260)state.bpm=x.bpm;}}catch(e){/* A preview remains usable when local storage is unavailable. */}
+let toastTimer=0,recTimer=0,recordAt=0,generationTimer=0,audioCtx=null,audioMaster=null,voices=[],playAt=0,startBeat=0,raf=0,lastFocus=null,drag=null,splitDrag=null;
+function toast(text){const el=$('#editor').open?$('#editorToast'):$('#toast');el.textContent=text;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3600);}
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:1,bpm:state.bpm,notes:state.notes}));$('#saveStatus').textContent='시안 변경 저장됨';}catch(e){$('#saveStatus').textContent='이번 화면에만 유지';toast('브라우저 저장 공간을 사용할 수 없어 이번 화면에서만 유지됩니다.');}}
+const layoutLabels={'phone-portrait':'휴대폰 세로','phone-landscape':'휴대폰 가로','tablet-portrait':'태블릿 세로','tablet-landscape':'태블릿 가로','desktop':'넓은 작업 화면'};
+function layout(){const w=innerWidth,h=innerHeight,coarse=matchMedia('(pointer: coarse)').matches;let l;if(w<600&&h>=w)l='phone-portrait';else if(h<=520&&w>h)l='phone-landscape';else if(w<600)l='phone-portrait';else if(h>w)l='tablet-portrait';else if(coarse||w<1280)l='tablet-landscape';else l='desktop';const old=state.layout;state.layout=l;document.body.dataset.layout=l;$('#layoutDescription').textContent=`현재 배치: ${layoutLabels[l]} · ${w} × ${h} CSS px`;if(old!==l){state.page=0;if($('#editor').open){if(l.startsWith('phone')&&state.view==='split')setView('roll');renderEditor();}}renderHome();}
+let layoutPending=false;function scheduleLayout(){if(layoutPending)return;layoutPending=true;requestAnimationFrame(()=>{layoutPending=false;layout();});}
+addEventListener('resize',scheduleLayout);addEventListener('orientationchange',scheduleLayout);
+// Keep dialogs within the visible viewport while the software keyboard is open.
+if(window.visualViewport){visualViewport.addEventListener('resize',()=>{document.documentElement.style.setProperty('--app-height',`${visualViewport.height}px`);});}
+$('#waveform').innerHTML=Array.from({length:36},(_,i)=>`<i style="height:${8+Math.round(Math.abs(Math.sin(i*.8))*23+Math.abs(Math.cos(i*.45))*6)}px"></i>`).join('');
+function pageBars(){return state.layout==='phone-landscape'?2:state.layout==='phone-portrait'?4:8;}
+function diatonic(p){const pc=(p%12+12)%12;return (Math.floor(p/12)-1)*7+[0,0,1,1,2,3,3,4,4,5,5,6][pc];}
+function scoreSVG(notes,startBar,count,width,selectable=false){
+ const compact=state.layout==='phone-landscape'&&!selectable,tall=state.layout==='tablet-portrait'&&!selectable;const narrow=width<630;const perRow=Math.min(tall?2:(narrow?2:4),count);const rows=Math.ceil(count/perRow);const W=compact?700:tall?940:(narrow?540:980),rowH=compact?154:tall?200:228,H=rows*rowH+(compact?12:30),lead=73,barW=(W-lead-16)/perRow;
+ let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="예제 피아노 양손 악보 ${startBar+1}마디부터 ${startBar+count}마디"><rect width="${W}" height="${H}" fill="var(--score-bg)"/>`;
+ for(let r=0;r<rows;r++){let top=(compact?8:28)+r*rowH;const rbar=startBar+r*perRow,nb=Math.min(perRow,count-r*perRow),end=lead+barW*nb;
+  s+=compact?`<path d="M42 ${top+20}Q31 ${top+20} 36 ${top+52}Q41 ${top+77} 29 ${top+78}Q41 ${top+79} 36 ${top+105}Q31 ${top+138} 42 ${top+138}" fill="none" stroke="var(--score-ink)" stroke-width="1.5"/>`:`<path d="M42 ${top+20}Q31 ${top+20} 36 ${top+67}Q41 ${top+110} 29 ${top+111}Q41 ${top+112} 36 ${top+151}Q31 ${top+195} 42 ${top+195}" fill="none" stroke="var(--score-ink)" stroke-width="1.5"/>`;
+  for(const h of ['R','L']){const y=top+(h==='R'?(compact?20:28):(compact?88:145));for(let k=0;k<5;k++)s+=`<line x1="49" y1="${y+k*10}" x2="${end}" y2="${y+k*10}" stroke="var(--score-line)" stroke-width=".8"/>`;s+=`<text x="48" y="${y+38}" font-size="45" fill="var(--score-ink)" font-family="'Noto Music','Apple Symbols','Segoe UI Symbol','FreeSerif',serif">${h==='R'?'𝄞':'𝄢'}</text>`;if(r===0){s+=`<text x="38" y="${y-8}" font-size="10" fill="${h==='R'?'var(--blue)':'var(--green)'}" font-family="sans-serif">${h==='R'?'R':'L'}</text>`;}}
+  for(let j=0;j<nb;j++){const m=rbar+j,x=lead+j*barW;let chord=['C','F','Am','G','C','F','G','C'][m%8];s+=`<text x="${x+12}" y="${top+12}" font-size="12" fill="var(--muted)" font-family="sans-serif">${m+1}</text><text x="${x+35}" y="${top+12}" font-size="12" fill="var(--muted)" font-family="sans-serif">${chord}</text><line x1="${x+barW}" y1="${top+(compact?20:28)}" x2="${x+barW}" y2="${top+(compact?128:185)}" stroke="var(--score-line)" stroke-width=".9"/>`;
+   for(const n of notes.filter(n=>n.b>=m*4&&n.b<(m+1)*4)){const ny0=top+(n.h==='R'?(compact?60:68):(compact?128:185));const base=n.h==='R'?diatonic(64):diatonic(43);const y=ny0-(diatonic(n.p)-base)*5;const nx=x+24+(n.b-m*4)*(barW-32)/4;const color=state.showHands?(n.h==='R'?'var(--blue)':'var(--green)'):'var(--score-ink)';const selected=selectable&&state.selected.has(n.id);const open=n.d>=2;
+    if(selected)s+=`<rect x="${nx-13}" y="${y-13}" width="26" height="26" rx="7" fill="var(--selection)" stroke="var(--blue)"/>`;
+    if(y>ny0){for(let ly=ny0+10;ly<=y;ly+=10)s+=`<line x1="${nx-12}" y1="${ly}" x2="${nx+12}" y2="${ly}" stroke="var(--score-line)" stroke-width=".8"/>`;}
+    if(y<ny0-40){for(let ly=ny0-50;ly>=y;ly-=10)s+=`<line x1="${nx-12}" y1="${ly}" x2="${nx+12}" y2="${ly}" stroke="var(--score-line)" stroke-width=".8"/>`;}
+    const accidental=[1,3,6,8,10].includes(n.p%12);if(accidental)s+=`<text x="${nx-18}" y="${y+5}" font-size="15" fill="${color}">♯</text>`;
+    const stemDown=y<ny0-20,stemX=nx+(stemDown?-6:6);s+=`<g ${selectable?`data-score-note="${n.id}" style="cursor:pointer"`:''}><ellipse cx="${nx}" cy="${y}" rx="7.2" ry="4.5" transform="rotate(-18 ${nx} ${y})" fill="${open?'var(--score-bg)':color}" stroke="${color}" stroke-width="1.5"/>`;
+    if(n.d<4){const endy=y+(stemDown?29:-29);s+=`<line x1="${stemX}" y1="${y}" x2="${stemX}" y2="${endy}" stroke="${color}" stroke-width="1.4"/>`;if(n.d<1)s+=`<path d="M${stemX} ${endy}q13 ${stemDown?-7:7} 6 ${stemDown?-17:17}" fill="none" stroke="${color}" stroke-width="2"/>`;}
+    if(selectable)s+=`<rect x="${nx-15}" y="${y-18}" width="30" height="38" fill="transparent"/>`;s+='</g>';
+   }
+  }
+ }
+ s+='</svg>';return s;
+}
+function renderHome(){const count=pageBars(),pages=Math.ceil(8/count);state.page=Math.min(state.page,pages-1);const start=state.page*count;const width=$('#homeScoreArea').clientWidth;$('#homeScore').innerHTML=scoreSVG(state.notes,start,count,width);$('#pageLabel').textContent=`${start+1}–${start+count} / 8마디`;$('#prevPage').disabled=state.page===0;$('#nextPage').disabled=state.page>=pages-1;$('#rightCount').textContent=state.notes.filter(n=>n.h==='R').length+'음';$('#leftCount').textContent=state.notes.filter(n=>n.h==='L').length+'음';}
+$('#prevPage').onclick=()=>{state.page--;renderHome();$('#homeScoreArea').scrollTop=0;};$('#nextPage').onclick=()=>{state.page++;renderHome();$('#homeScoreArea').scrollTop=0;};
+$('#handsToggle').onclick=()=>{state.showHands=!state.showHands;$('#handsToggle').setAttribute('aria-pressed',String(state.showHands));renderHome();if($('#editor').open)renderEditor();};
+$('#recordButton').onclick=()=>{if(state.generating)return;pause();state.recording=!state.recording;$('#recordCard').classList.toggle('is-recording',state.recording);$('#generateButton').disabled=state.recording;$('#playButton').disabled=state.recording;$('#recordButton').innerHTML=state.recording?'<svg class="icon"><use href="#i-stop"/></svg><span>시연 멈춤</span>':'<svg class="icon"><use href="#i-mic"/></svg><span>녹음 시연</span>';$('#recordStatus').textContent=state.recording?'시연 중':'시연 종료';if(state.recording){recordAt=performance.now();$('#recordTime').textContent='00:00';recTimer=setInterval(()=>{$('#recordTime').textContent=fmt((performance.now()-recordAt)/1000);},200);toast('화면 전환 시연입니다. 실제 마이크는 녹음하지 않습니다.');}else{clearInterval(recTimer);toast('녹음 종료 화면입니다. 악보 시연을 눌러 다음 단계를 확인하세요.');}};
+$('#generateButton').onclick=()=>{if(state.recording||state.generating)return;state.generating=true;$('#generationLine').hidden=false;$('#generateButton').disabled=true;$('#recordButton').disabled=true;$('#scoreSource').textContent='예제 악보 표시 준비 중 · AI 분석 아님';toast('시연용 악보를 표시합니다. 실제 AI 채보는 실행하지 않습니다.');generationTimer=setTimeout(()=>{state.generating=false;$('#generationLine').hidden=true;$('#generateButton').disabled=false;$('#recordButton').disabled=false;$('#scoreSource').textContent='직접 만든 예제 악보 · 분석 아님';renderHome();},900);};
+function currentNotes(){return $('#editor').open?state.draft:state.notes;}
+function stopVoices(){for(const v of voices){try{v.stop();}catch(e){}}voices=[];if(audioMaster){audioMaster.disconnect();audioMaster=null;}}
+function pause(){if(state.playing){state.position=Math.min(32,startBeat+(performance.now()-playAt)/1000*state.bpm*state.speed/60);}state.playing=false;stopVoices();cancelAnimationFrame(raf);updateTransport();}
+async function play(){if(state.playing){pause();return;}if(state.recording)return;try{const A=window.AudioContext||window.webkitAudioContext;if(!A)throw new Error('No Web Audio');audioCtx=audioCtx||new A();await audioCtx.resume();if(state.position>=31.99)state.position=0;stopVoices();audioMaster=audioCtx.createGain();audioMaster.gain.value=.19;audioMaster.connect(audioCtx.destination);const start=audioCtx.currentTime+.04;const bps=state.bpm*state.speed/60;for(const n of currentNotes()){if(state.listen!=='both'&&n.h!==state.listen)continue;if(n.b+n.d<=state.position)continue;const delay=Math.max(0,n.b-state.position)/bps,dur=Math.min((n.d-Math.max(0,state.position-n.b))/bps,4);const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type='triangle';osc.frequency.value=440*2**((n.p-69)/12);gain.gain.setValueAtTime(0,start+delay);gain.gain.linearRampToValueAtTime(n.h==='L'?.42:.62,start+delay+.01);gain.gain.exponentialRampToValueAtTime(.025,start+delay+Math.max(.025,dur*.9));gain.gain.linearRampToValueAtTime(0,start+delay+dur);osc.connect(gain);gain.connect(audioMaster);osc.start(start+delay);osc.stop(start+delay+dur+.02);voices.push(osc);}state.playing=true;startBeat=state.position;playAt=performance.now();tick();}catch(e){pause();toast('이 브라우저에서는 예제 소리를 재생하지 못했습니다. 화면 검토와 편집은 가능합니다.');}}
+function tick(){if(!state.playing)return;state.position=Math.min(32,startBeat+(performance.now()-playAt)/1000*state.bpm*state.speed/60);updateTransport();if(state.position>=32){pause();return;}raf=requestAnimationFrame(tick);}
+function updateTransport(){const is=state.playing;$('#playButton').innerHTML=`<svg class="icon"><use href="#i-${is?'pause':'play'}"/></svg><span>${is?'일시 정지':'예제 재생'}</span>`;$('#editorPlay').innerHTML=`<svg class="icon"><use href="#i-${is?'pause':'play'}"/></svg>${is?'일시 정지':'예제 재생'}`;$('#seek').value=String(state.position);$('#positionLabel').textContent=fmt(secondsOf(state.position));$('#durationLabel').textContent=fmt(secondsOf(32));$('#editTime').textContent=`${fmt(secondsOf(state.position))} / ${fmt(secondsOf(32))}`;const line=$('#rollPlayhead');if(line)line.style.left=(50+state.position*state.zoom)+'px';}
+$('#playButton').onclick=play;$('#editorPlay').onclick=play;$('#editorStart').onclick=()=>{pause();state.position=0;updateTransport();};$('#seek').addEventListener('input',()=>{pause();state.position=Number($('#seek').value);updateTransport();});
+function setSpeed(v){pause();state.speed=Number(v);$('#speed').value=String(v);$('#menuSpeed').value=String(v);updateTransport();}$('#speed').onchange=e=>setSpeed(e.target.value);$('#menuSpeed').onchange=e=>setSpeed(e.target.value);
+function listen(h){pause();state.listen=h;$$('[data-hand-listen]').forEach(b=>{b.classList.toggle('active',b.dataset.handListen===h);b.setAttribute('aria-pressed',String(b.dataset.handListen===h));});$('#menuHand').value=h;}$$('[data-hand-listen]').forEach(b=>b.onclick=()=>listen(b.dataset.handListen));$('#menuHand').onchange=e=>listen(e.target.value);
+function openEditor(){if(state.recording){toast('녹음 시연을 멈춘 뒤 편집할 수 있습니다.');return;}lastFocus=document.activeElement;pause();state.draft=clone(state.notes);state.selected=new Set(state.draft.length?[state.draft[0].id]:[]);state.history=[];state.future=[];state.dirty=false;state.view=state.layout.startsWith('phone')?'roll':'split';$('#editor').showModal();setView(state.view);renderEditor();requestAnimationFrame(()=>{const sel=state.draft.find(n=>state.selected.has(n.id));$('#rollScroll').scrollTop=sel?Math.max(0,(84-sel.p)*24-90):0;$('#rollScroll').scrollLeft=0;$('#closeEditor').focus();});}
+function closeEditor(apply=false){if(!$('#editor').open)return;pause();if(apply){state.notes=clone(state.draft);persist();renderHome();}$('#editor').close();state.draft=[];state.dirty=false;if(lastFocus&&lastFocus.isConnected)lastFocus.focus();if(!apply)toast('완료를 누르지 않은 편집은 원래대로 돌아갔습니다.');}
+$$('[data-open-editor]').forEach(b=>b.onclick=openEditor);$('#closeEditor').onclick=()=>closeEditor(false);$('#applyEditor').onclick=()=>closeEditor(true);$('#editor').addEventListener('cancel',e=>{e.preventDefault();closeEditor(false);});
+function setView(v){if(state.layout.startsWith('phone')&&v==='split')v='roll';state.view=v;$('#editBody').dataset.view=v;$('#editCenter').style.gridTemplateRows=v==='split'?'minmax(160px,42%) 9px minmax(0,1fr)':'minmax(0,1fr)';$$('#editViews [data-view]').forEach(b=>{b.classList.toggle('active',b.dataset.view===v);b.setAttribute('aria-pressed',String(b.dataset.view===v));});requestAnimationFrame(()=>{if($('#editor').open)renderEditor();});}
+$$('#editViews [data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+function historyPush(){state.history.push(clone(state.draft));if(state.history.length>80)state.history.shift();state.future=[];}
+function changed(){pause();state.dirty=JSON.stringify(state.draft)!==JSON.stringify(state.notes);renderEditor();}
+function mutate(fn){if(!state.selected.size)return;historyPush();state.draft.forEach(n=>{if(state.selected.has(n.id))fn(n);});changed();}
+function undo(){if(!state.history.length)return;state.future.push(clone(state.draft));state.draft=state.history.pop();changed();}
+function redo(){if(!state.future.length)return;state.history.push(clone(state.draft));state.draft=state.future.pop();changed();}
+$('#undoButton').onclick=undo;$('#redoButton').onclick=redo;
+function choose(id,add=false){if(add){if(state.selected.has(id))state.selected.delete(id);else state.selected.add(id);}else state.selected=new Set([id]);renderSelection();renderScoreEditor();}
+function renderScoreEditor(){const width=$('#editSheetScroll').clientWidth;const first=state.draft.find(n=>state.selected.has(n.id));const start=first?Math.floor(first.b/16)*4:0;$('#editScore').innerHTML=scoreSVG(state.draft,start,4,width,true);}
+function renderSelection(){const ns=state.draft.filter(n=>state.selected.has(n.id)),n=ns[0];const name=n?(ns.length>1?`${ns.length}음`:nameOf(n.p)):'선택 없음';$('#selectedName').textContent=name;$('#mobileNoteName').textContent=name;$('#pitchLabel').textContent=n?nameOf(n.p):'—';$('#lengthLabel').textContent=n?`${n.d}박`:'—';$('#selectedWhen').textContent=n?`${Math.floor(n.b/4)+1}마디 · ${Number((n.b%4+1).toFixed(2))}박`:'음을 선택하세요';$$('[data-set-hand]').forEach(b=>{const active=ns.length>0&&ns.every(n=>n.h===b.dataset.setHand);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));b.disabled=!n;});$$('[data-pitch],[data-duration],[data-delete]').forEach(b=>b.disabled=!n);$$('.roll-note').forEach(b=>{const selected=state.selected.has(b.dataset.id);b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});$('#undoButton').disabled=!state.history.length;$('#redoButton').disabled=!state.future.length;$('#dirtyState').textContent=state.dirty?'완료를 누르면 반영':'변경 없음';}
+function renderEditor(){if(!$('#editor').open)return;const scroll=$('#rollScroll'),left=scroll.scrollLeft,top=scroll.scrollTop;const z=state.zoom,row=24,range=49,height=27+range*row,width=50+32*z;let h=`<div class="roll-ruler">${Array.from({length:8},(_,i)=>`<span style="left:${56+i*4*z}px">${i+1}</span>`).join('')}</div>`;
+ for(let p=84;p>=36;p--){const black=[1,3,6,8,10].includes(p%12);h+=`<div class="key-row ${black?'black':''}" style="top:${27+(84-p)*row}px;height:${row}px"><div class="key-label">${p%12===0?nameOf(p):black?'':pitchNames[p%12]}</div></div>`;}
+ for(let b=0;b<=32;b++)h+=`<div class="${b%4===0?'bar-line':'beat-line'}" style="left:${50+b*z}px"></div>`;
+ for(const n of state.draft){h+=`<button class="roll-note ${n.h==='L'?'left':''} ${state.selected.has(n.id)?'selected':''}" data-id="${n.id}" aria-label="${nameOf(n.p)}, ${n.h==='L'?'왼손':'오른손'}, ${n.d}박" aria-pressed="${state.selected.has(n.id)}" style="left:${50+n.b*z}px;top:${30+(84-n.p)*row}px;width:${Math.max(12,n.d*z-3)}px">${n.d*z>34?nameOf(n.p):''}<span class="resize-grip" aria-hidden="true"></span></button>`;}
+ h+=`<div class="roll-playhead" id="rollPlayhead" style="left:${50+state.position*z}px"></div>`;$('#rollCanvas').style.width=width+'px';$('#rollCanvas').style.height=height+'px';$('#rollCanvas').innerHTML=h;scroll.scrollLeft=left;scroll.scrollTop=top;renderScoreEditor();renderSelection();}
+$('#editScore').addEventListener('click',e=>{const el=e.target.closest('[data-score-note]');if(el){choose(el.dataset.scoreNote,e.shiftKey);}});
+$$('[data-set-hand]').forEach(b=>b.onclick=()=>mutate(n=>n.h=b.dataset.setHand));$$('[data-pitch]').forEach(b=>b.onclick=()=>mutate(n=>n.p=Math.max(36,Math.min(84,n.p+Number(b.dataset.pitch)))));$$('[data-duration]').forEach(b=>b.onclick=()=>mutate(n=>n.d=Math.max(.25,Math.min(32-n.b,n.d+Number(b.dataset.duration)))));
+function deleteNotes(){if(!state.selected.size)return;historyPush();state.draft=state.draft.filter(n=>!state.selected.has(n.id));state.selected=new Set();changed();}$$('[data-delete]').forEach(b=>b.onclick=deleteNotes);
+$('#rollZoom').onchange=e=>{const old=state.zoom;state.zoom=Number(e.target.value);const b=($('#rollScroll').scrollLeft-50)/old;renderEditor();$('#rollScroll').scrollLeft=Math.max(0,50+b*state.zoom);};
+$('#rollCanvas').addEventListener('pointerdown',e=>{const el=e.target.closest('.roll-note');if(!el||e.button!==0)return;e.preventDefault();const id=el.dataset.id;choose(id,e.shiftKey);if(!state.selected.has(id))return;drag={id,x:e.clientX,y:e.clientY,origin:clone(state.draft),moving:false,resize:!!e.target.closest('.resize-grip'),pointerId:e.pointerId};el.setPointerCapture(e.pointerId);});
+addEventListener('pointermove',e=>{if(splitDrag){const box=$('#editCenter').getBoundingClientRect();let pct=Math.max(20,Math.min(75,(e.clientY-box.top)/box.height*100));$('#editCenter').style.gridTemplateRows=`minmax(80px,${pct}%) 9px minmax(0,1fr)`;return;}if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(!drag.moving&&Math.abs(dx)+Math.abs(dy)<7)return;if(!drag.moving){state.history.push(clone(drag.origin));state.future=[];drag.moving=true;pause();}const db=Math.round(dx/state.zoom*4)/4,dp=-Math.round(dy/24);state.draft=clone(drag.origin);state.draft.forEach(n=>{if(!state.selected.has(n.id))return;if(drag.resize)n.d=Math.max(.25,Math.min(32-n.b,n.d+db));else{n.b=Math.max(0,Math.min(32-n.d,n.b+db));n.p=Math.max(36,Math.min(84,n.p+dp));}});state.dirty=true;for(const n of state.draft){const el=$(`.roll-note[data-id="${n.id}"]`);if(el){el.style.left=(50+n.b*state.zoom)+'px';el.style.top=(30+(84-n.p)*24)+'px';el.style.width=Math.max(12,n.d*state.zoom-3)+'px';}}renderSelection();renderScoreEditor();});
+addEventListener('pointerup',()=>{if(drag){drag=null;changed();}splitDrag=null;});addEventListener('pointercancel',()=>{if(drag){state.draft=drag.origin;if(drag.moving)state.history.pop();drag=null;changed();}splitDrag=null;});
+$('#splitHandle').addEventListener('pointerdown',e=>{splitDrag=true;$('#splitHandle').setPointerCapture(e.pointerId);});$('#splitHandle').addEventListener('keydown',e=>{if(!['ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const cur=$('#editCenter').style.gridTemplateRows.match(/([\d.]+)%/);const pct=Math.max(20,Math.min(75,(cur?Number(cur[1]):42)+(e.key==='ArrowUp'?-5:5)));$('#editCenter').style.gridTemplateRows=`minmax(80px,${pct}%) 9px minmax(0,1fr)`;});
+addEventListener('keydown',e=>{if($('#menuDialog').open||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;const ed=$('#editor').open;if(e.code==='Space'&&e.target.tagName!=='BUTTON'){e.preventDefault();play();return;}if(!ed)return;const cmd=e.ctrlKey||e.metaKey;if(cmd&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo();return;}if(cmd&&e.key.toLowerCase()==='y'){e.preventDefault();redo();return;}if(e.key==='Delete'||e.key==='Backspace'){e.preventDefault();deleteNotes();}if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)&&e.target.id!=='splitHandle'){e.preventDefault();if(e.key==='ArrowUp'||e.key==='ArrowDown')mutate(n=>n.p=Math.max(36,Math.min(84,n.p+(e.key==='ArrowUp'?1:-1))));else mutate(n=>n.b=Math.max(0,Math.min(32-n.d,n.b+(e.key==='ArrowRight'?.25:-.25))));}});
+function menu(){if(!$('#menuDialog').open)$('#menuDialog').showModal();}$('#moreButton').onclick=menu;$('#listenMenu').onclick=menu;$$('[data-open-menu]').forEach(b=>b.onclick=menu);$('#closeMenu').onclick=()=>$('#menuDialog').close();$('#menuOpenEditor').onclick=()=>{$('#menuDialog').close();openEditor();};
+function guitarInfo(){const t='기타 코드 화면은 다음 구현 범위입니다. 곡 전체의 마디별 코드명·운지표·카포·스트로크를 별도 출력해야 하며, 이 시안은 실제 기타 편곡을 실행하지 않습니다.';$('#menuDescription').textContent=t;menu();}
+$('#menuGuitar').onclick=guitarInfo;$('#outputSelect').onchange=()=>{if($('#outputSelect').value==='guitar'){guitarInfo();$('#outputSelect').value='piano';}};
+$('#exportDemo').onclick=()=>{const blob=new Blob([JSON.stringify({format:'piano-studio-ui-preview',version:1,notice:'UI example data; not the source application project format',bpm:state.bpm,notes:state.notes},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='piano-ui-example.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('#resetDemo').onclick=()=>{pause();if(state.recording){state.recording=false;clearInterval(recTimer);$('#recordCard').classList.remove('is-recording');$('#recordStatus').textContent='시연 준비';$('#recordTime').textContent='00:00';$('#recordButton').innerHTML='<svg class="icon"><use href="#i-mic"/></svg><span>녹음 시연</span>';$('#playButton').disabled=false;}clearTimeout(generationTimer);state.generating=false;$('#generationLine').hidden=true;$('#generateButton').disabled=false;$('#recordButton').disabled=false;$('#scoreSource').textContent='직접 만든 예제 악보';state.notes=initialNotes();state.page=0;state.position=0;persist();renderHome();updateTransport();$('#menuDialog').close();toast('시안의 예제만 초기화했습니다. 원본 앱에는 영향이 없습니다.');};
+$('#editorHelp').onclick=()=>toast('음 선택 → 왼손/오른손·높이 조절. 음을 끌어 이동, 오른쪽 끝으로 길이 조절. 완료로 반영하고 ×로 취소합니다.');
+addEventListener('pagehide',()=>{pause();clearInterval(recTimer);});
+layout();updateTransport();listen('both');
+// Expose read-only diagnostics for the included browser checks.
+window.previewDiagnostics=()=>({layout:state.layout,recording:state.recording,playing:state.playing,editorOpen:$('#editor').open,view:state.view,dirty:state.dirty,notes:clone(state.notes),draft:clone(state.draft),selected:[...state.selected]});
+</script>
+<dialog class="metronome-dialog" id="metronomeDialog" aria-labelledby="metronomeTitle">
+ <header class="metro-head"><div><h2 id="metronomeTitle">메트로놈</h2><p>곡·녹음 없이 바로 연습하세요.</p></div><button class="icon-btn flat" id="closeMetronome" aria-label="메트로놈 창 닫기. 소리는 계속 재생됩니다."><svg class="icon"><use href="#i-close"/></svg></button></header>
+ <div class="metro-content">
+  <section class="metro-primary" aria-label="빠르기 조절"><div class="metro-dots" id="metronomeDots" aria-hidden="true"></div>
+   <div class="metro-tempo"><button data-metro-delta="-5" aria-label="5 BPM 느리게">−5</button><button data-metro-delta="-1" aria-label="1 BPM 느리게">−1</button><div class="metro-number"><input id="metronomeBpm" type="number" inputmode="numeric" min="30" max="260" step="1" value="96" aria-label="메트로놈 BPM"><small id="metronomeUnit">BPM · ♩ 한 박</small></div><button data-metro-delta="1" aria-label="1 BPM 빠르게">+1</button><button data-metro-delta="5" aria-label="5 BPM 빠르게">+5</button></div>
+   <input id="metronomeSlider" type="range" min="30" max="260" step="1" value="96" aria-label="메트로놈 빠르기 슬라이더">
+   <button id="metronomeTap">박마다 탭해서 빠르기 찾기</button>
+  </section>
+  <section class="metro-grid" aria-label="박자와 소리 설정">
+   <label>박자<select id="metronomeMeter"><option value="1">1박 · 강박 없음</option><option value="2">2/4</option><option value="3">3/4 · 왈츠</option><option value="4" selected>4/4</option><option value="5">5/4</option><option value="6/8">6/8 · 3+3</option></select></label>
+   <label>한 박 쪼개기<select id="metronomeSubdivision"><option value="1">안 쪼갬</option><option value="2">둘로</option><option value="3">셋으로 · 셋잇단</option><option value="4">넷으로</option></select></label>
+   <label>소리<select id="metronomeSound"><option value="click">딸깍</option><option value="wood" selected>나무</option><option value="beep">삐</option></select></label>
+   <label>음량 <span id="metronomeVolumeLabel">50%</span><input id="metronomeVolume" type="range" min="0" max="1" step=".05" value=".5" aria-label="메트로놈 음량"></label>
+   <label class="checkbox-label"><input type="checkbox" id="metronomeAccent" checked>첫 박 강조</label><label class="checkbox-label"><input type="checkbox" id="metronomeAwake" checked>화면 켜 두기</label>
+  </section>
+  <div class="metro-song-actions"><button id="metronomeFromSong">예제 곡 빠르기 가져오기</button><button id="metronomeToSong">예제 곡에 BPM 적용</button></div>
+  <p class="metro-help" id="metronomeHelp">창을 닫아도 계속 울립니다. 화면 잠금·다른 앱 전환 시에는 멈춥니다. ‘화면 켜 두기’는 지원되는 브라우저에서만 작동합니다.</p>
+ </div>
+ <footer class="metro-footer"><button class="metro-quick" data-metro-toggle aria-pressed="false"><svg class="icon"><use href="#i-play"/></svg><span>시작</span></button><span class="metro-status" id="metronomeStatus" role="status" aria-live="polite">준비됨 · 마이크 권한 불필요</span></footer>
+</dialog>
+
+<script>
+/* Standalone metronome. No microphone, model, audio file, network, or song required. */
+class PianoMetronome {
+  constructor({context, onChange = () => {}, onBeat = () => {}, onError = () => {}}) {
+    this.getContext = context; this.onChange = onChange; this.onBeat = onBeat; this.onError = onError;
+    this.key = 'piano-studio-metronome-v2';
+    this.config = {bpm:96, meter:'4', subdivision:1, volume:0.5, sound:'wood', accent:true, awake:true};
+    try { const saved = JSON.parse(localStorage.getItem(this.key) || 'null'); if (saved) this.config = this.sanitize({...this.config, ...saved}); } catch (_) {}
+    this.running = false; this.pending = false; this.timer = null; this.raf = null; this.ctx = null; this.master = null;
+    this.nodes = new Set(); this.queue = []; this.step = 0; this.next = 0; this.epoch = 0;
+    this.wake = null; this.taps = []; this.lastReason = ''; this.tickCount = 0; this.log = [];
+    this.visibility = () => { if (document.hidden && (this.running || this.pending)) this.stop('화면이 비활성화되어 멈췄습니다. 다시 시작 버튼을 눌러 주세요.'); };
+    this.pagehide = () => this.stop('페이지 종료');
+    document.addEventListener('visibilitychange', this.visibility);
+    window.addEventListener('pagehide', this.pagehide);
+  }
+  sanitize(input) {
+    const number = (v, fallback, min, max) => Number.isFinite(Number(v)) ? Math.max(min, Math.min(max, Number(v))) : fallback;
+    return {bpm:Math.round(number(input.bpm,96,30,260)), meter:['1','2','3','4','5','6/8'].includes(input.meter)?input.meter:'4',
+      subdivision:[1,2,3,4].includes(Number(input.subdivision))?Number(input.subdivision):1,
+      volume:number(input.volume,.5,0,1), sound:['click','wood','beep'].includes(input.sound)?input.sound:'wood',
+      accent:typeof input.accent === 'boolean'?input.accent:true, awake:typeof input.awake === 'boolean'?input.awake:true};
+  }
+  snapshot() { return {...this.config, running:this.running, pending:this.pending, beat:this.lastBeat ?? -1,
+    tickCount:this.tickCount, activeVoices:this.nodes.size, timerActive:this.timer!==null, reason:this.lastReason,
+    wakeActive:!!this.wake, scheduled:this.log.slice(-32)}; }
+  notify() { this.onChange(this.snapshot()); }
+  save() { try { localStorage.setItem(this.key, JSON.stringify(this.config)); } catch (_) {} }
+  set(patch) {
+    const previous = this.config; this.config = this.sanitize({...previous,...patch}); this.save();
+    if (this.master && this.ctx) this.master.gain.setTargetAtTime(this.config.volume * .55, this.ctx.currentTime, .008);
+    if (this.running && (previous.meter !== this.config.meter || previous.subdivision !== this.config.subdivision)) {
+      this.clearVoices(); this.queue=[]; this.step=0; this.next=this.ctx.currentTime+.045; this.schedule();
+    }
+    if (previous.awake !== this.config.awake) {
+      if (!this.config.awake) this.releaseWake();
+      else if (this.running) this.requestWake(this.epoch);
+    }
+    this.notify();
+  }
+  beats() { return this.config.meter === '6/8' ? 6 : Number(this.config.meter); }
+  level(beat) {
+    if (!this.config.accent || this.config.meter==='1') return 0;
+    if (beat===0) return 2;
+    return this.config.meter==='6/8' && beat===3 ? 1 : 0;
+  }
+  async toggle() { if (this.running || this.pending) this.stop(); else await this.start(); }
+  async start() {
+    if (this.running || this.pending) return;
+    const token=++this.epoch; this.pending=true; this.lastReason=''; this.notify();
+    try {
+      this.ctx=this.getContext();
+      if (!this.ctx) throw new Error('Web Audio를 사용할 수 없습니다.');
+      await this.ctx.resume();
+      if (token!==this.epoch) return;
+      if (this.ctx.state!=='running') throw new Error('오디오가 준비되지 않았습니다. 시작 버튼을 다시 눌러 주세요.');
+      this.master=this.ctx.createGain(); this.master.gain.value=this.config.volume*.55; this.master.connect(this.ctx.destination);
+      this.running=true; this.pending=false; this.step=0; this.tickCount=0; this.log=[]; this.queue=[]; this.next=this.ctx.currentTime+.05;
+      this.schedule(); this.timer=window.setInterval(()=>this.schedule(),25); this.draw(); this.notify();
+      this.requestWake(token);
+    } catch (error) { if (token===this.epoch) { this.stop(); this.lastReason=String(error.message||error); this.onError(this.lastReason); this.notify(); } }
+  }
+  async requestWake(token) {
+    if (!this.config.awake || !navigator.wakeLock || document.hidden || this.wake) return;
+    try {
+      const lock=await navigator.wakeLock.request('screen');
+      if (!this.running || token!==this.epoch || !this.config.awake) { await lock.release(); return; }
+      this.wake=lock; lock.addEventListener('release',()=>{ if(this.wake===lock){this.wake=null;this.notify();} }); this.notify();
+    } catch (_) { /* Unsupported/denied wake lock never blocks the sound. */ }
+  }
+  releaseWake() { const lock=this.wake; this.wake=null; if(lock) Promise.resolve(lock.release()).catch(()=>{}); }
+  clearVoices() {
+    for (const node of this.nodes) { try { node.stop(); node.disconnect(); } catch (_) {} }
+    this.nodes.clear();
+  }
+  stop(reason='') {
+    ++this.epoch; this.running=false; this.pending=false;
+    if(this.timer!==null) clearInterval(this.timer); this.timer=null;
+    if(this.raf!==null) cancelAnimationFrame(this.raf); this.raf=null;
+    this.queue=[]; this.clearVoices();
+    if(this.master) { try{this.master.disconnect();}catch(_){} this.master=null; }
+    this.releaseWake(); this.lastBeat=-1; this.lastReason=reason; this.onBeat(-1); this.notify();
+  }
+  tone(at, level, subdivision) {
+    const osc=this.ctx.createOscillator(), envelope=this.ctx.createGain();
+    const sound=this.config.sound, strong=level===2, medium=level===1;
+    let hz=strong?1500:medium?1160:900, duration=.042;
+    if(sound==='wood') { hz=strong?1250:medium?980:730; duration=.065; }
+    if(sound==='beep') { hz=strong?1320:medium?1100:880; duration=.085; }
+    if(subdivision) hz*=.8;
+    osc.type=sound==='click'?'triangle':'sine'; osc.frequency.setValueAtTime(hz,at);
+    if(sound==='wood') osc.frequency.exponentialRampToValueAtTime(hz*.55,at+duration);
+    const peak=(subdivision?.20:strong?.92:medium?.74:.58);
+    envelope.gain.setValueAtTime(0,at); envelope.gain.linearRampToValueAtTime(peak,at+.002);
+    envelope.gain.exponentialRampToValueAtTime(.0001,at+duration);
+    osc.connect(envelope); envelope.connect(this.master); this.nodes.add(osc);
+    osc.onended=()=>{this.nodes.delete(osc);try{osc.disconnect();envelope.disconnect();}catch(_){}};
+    osc.start(at); osc.stop(at+duration+.008);
+    this.tickCount++; this.log.push({at,beat:Math.floor(this.step/this.config.subdivision)%this.beats(),subdivision,level});
+    if(this.log.length>64)this.log.shift();
+  }
+  schedule() {
+    if(!this.running || !this.ctx) return;
+    if(this.ctx.state!=='running') { this.stop('오디오가 중단되어 멈췄습니다. 다시 시작 버튼을 눌러 주세요.'); return; }
+    const now=this.ctx.currentTime;
+    if(this.next<now-.15) { this.clearVoices();this.queue=[];this.next=now+.04;this.step=0; }
+    let safety=0;
+    while(this.next<now+.12 && safety++<64) {
+      const sub=this.config.subdivision,beat=Math.floor(this.step/sub)%this.beats(),part=this.step%sub;
+      this.tone(this.next,this.level(beat),part>0);
+      if(part===0)this.queue.push({at:this.next,beat});
+      this.next+=60/this.config.bpm/sub; this.step++;
+    }
+  }
+  draw() {
+    if(!this.running)return;
+    let recent=null;
+    while(this.queue.length && this.queue[0].at<=this.ctx.currentTime)recent=this.queue.shift();
+    if(recent){this.lastBeat=recent.beat;this.onBeat(recent.beat);}
+    this.raf=requestAnimationFrame(()=>this.draw());
+  }
+  tap(now=performance.now()) {
+    if(this.taps.length && now-this.taps.at(-1)>2500)this.taps=[];
+    if(this.taps.length && now-this.taps.at(-1)<100)return;
+    this.taps.push(now); if(this.taps.length>8)this.taps.shift();
+    if(this.taps.length>=2) {
+      const gaps=this.taps.slice(1).map((t,i)=>t-this.taps[i]).sort((a,b)=>a-b);
+      const median=gaps[Math.floor(gaps.length/2)]; const good=gaps.filter(x=>x>median*.6&&x<median*1.5);
+      this.set({bpm:60000/(good.reduce((a,b)=>a+b,0)/good.length)});
+    }
+    return this.taps.length;
+  }
+}
+
+/* Adds tools to the v1 preview without replacing its editor or example data. */
+(() => {
+  'use strict';
+  const q = selector => document.querySelector(selector);
+  const qa = selector => [...document.querySelectorAll(selector)];
+  let lastMetroFocus = null, tapTimer = null;
+  function context() {
+    const A=window.AudioContext||window.webkitAudioContext;
+    if(!A)throw new Error('이 브라우저에서는 메트로놈 소리를 재생할 수 없습니다.');
+    audioCtx=audioCtx||new A(); return audioCtx;
+  }
+  function drawBeat(beat) {
+    qa('#metronomeDots i').forEach((dot,i)=>dot.classList.toggle('lit',i===beat));
+    qa('[data-metro-toggle]').forEach(button=>button.dataset.beat=String(beat));
+  }
+  function update(snapshot) {
+    const active=snapshot.running||snapshot.pending;
+    qa('[data-metro-toggle]').forEach(button=>{
+      button.setAttribute('aria-pressed',String(active));
+      button.setAttribute('aria-label', active?'메트로놈 정지':'메트로놈 단독 실행');
+      button.querySelector('use').setAttribute('href',active?'#i-stop':'#i-metro');
+      const label=button.querySelector('span');
+      if(label)label.textContent=button.id==='metroQuickButton'?(active?'메트로놈 정지':'메트로놈'):(snapshot.pending?'준비 중':snapshot.running?'정지':'시작');
+    });
+    qa('[data-metro-bpm]').forEach(el=>el.textContent=String(snapshot.bpm));
+    qa('[data-metro-open]').forEach(el=>{el.classList.toggle('running',active);el.setAttribute('aria-label',`메트로놈 설정. ${snapshot.bpm} BPM${active?', 실행 중':''}`);});
+    if(document.activeElement!==q('#metronomeBpm'))q('#metronomeBpm').value=snapshot.bpm;
+    q('#metronomeSlider').value=snapshot.bpm;
+    q('#metronomeMeter').value=snapshot.meter;
+    q('#metronomeSubdivision').value=snapshot.subdivision;
+    q('#metronomeVolume').value=snapshot.volume;
+    q('#metronomeVolumeLabel').textContent=Math.round(snapshot.volume*100)+'%';
+    q('#metronomeSound').value=snapshot.sound;
+    q('#metronomeAccent').checked=snapshot.accent;
+    q('#metronomeAwake').checked=snapshot.awake;
+    q('#metronomeUnit').textContent=snapshot.meter==='6/8'?'BPM · ♪ 한 박 (3+3)':'BPM · ♩ 한 박';
+    const key=snapshot.meter+':'+snapshot.accent;
+    if(q('#metronomeDots').dataset.pattern!==key) {
+      const beats=snapshot.meter==='6/8'?6:Number(snapshot.meter);
+      q('#metronomeDots').innerHTML=Array.from({length:beats},(_,i)=>`<i class="${snapshot.accent&&snapshot.meter!=='1'?(i===0?'strong':snapshot.meter==='6/8'&&i===3?'mid':''):''}"></i>`).join('');
+      q('#metronomeDots').dataset.pattern=key; drawBeat(snapshot.beat);
+    }
+    q('#metronomeStatus').textContent=snapshot.reason||(snapshot.pending?'오디오 준비 중':snapshot.running?`실행 중 · ${snapshot.bpm} BPM${snapshot.volume===0?' · 무음':''}${snapshot.wakeActive?' · 화면 켜 두기':''}`:'준비됨 · 마이크 권한 불필요');
+    q('#metronomeToSong').disabled=snapshot.meter!=='4';
+    q('#metronomeToSong').title=snapshot.meter==='4'?'예제의 음표는 그대로 두고 BPM만 바꿉니다.':'예제는 4/4 고정입니다. 다른 박자의 곡 적용은 원본 앱 기능을 사용하세요.';
+  }
+  const metro = new PianoMetronome({context,onChange:update,onBeat:drawBeat,onError:message=>{
+    q('#metronomeStatus').textContent=message;if(!q('#metronomeDialog').open)toast(message);
+  }});
+  function openMetro() {
+    lastMetroFocus=document.activeElement;
+    if(!q('#metronomeDialog').open)q('#metronomeDialog').showModal();
+    update(metro.snapshot());q('#closeMetronome').focus();
+  }
+  function closeMetro() {
+    q('#metronomeDialog').close();
+    if(lastMetroFocus?.isConnected)lastMetroFocus.focus();
+  }
+  qa('[data-metro-toggle]').forEach(button=>button.addEventListener('click',()=>metro.toggle()));
+  qa('[data-metro-open]').forEach(button=>button.addEventListener('click',openMetro));
+  q('#closeMetronome').onclick=closeMetro;
+  q('#metronomeDialog').addEventListener('cancel',event=>{event.preventDefault();closeMetro();});
+  qa('[data-metro-delta]').forEach(button=>button.onclick=()=>metro.set({bpm:metro.config.bpm+Number(button.dataset.metroDelta)}));
+  q('#metronomeBpm').onchange=event=>{
+    const value=event.target.valueAsNumber;
+    metro.set({bpm:Number.isFinite(value)?value:metro.config.bpm});event.target.value=metro.config.bpm;
+  };
+  q('#metronomeSlider').oninput=event=>metro.set({bpm:Number(event.target.value)});
+  q('#metronomeMeter').onchange=event=>metro.set({meter:event.target.value});
+  q('#metronomeSubdivision').onchange=event=>metro.set({subdivision:Number(event.target.value)});
+  q('#metronomeVolume').oninput=event=>metro.set({volume:Number(event.target.value)});
+  q('#metronomeSound').onchange=event=>metro.set({sound:event.target.value});
+  q('#metronomeAccent').onchange=event=>metro.set({accent:event.target.checked});
+  q('#metronomeAwake').onchange=event=>metro.set({awake:event.target.checked});
+  function tap() {const count=metro.tap();q('#metronomeTap').textContent=count>=2?`탭 ${count}번 · ${metro.config.bpm} BPM`:'박마다 계속 눌러 주세요';clearTimeout(tapTimer);tapTimer=setTimeout(()=>q('#metronomeTap').textContent='박마다 탭해서 빠르기 찾기',2600);}
+  q('#metronomeTap').onclick=tap;
+  q('#metronomeFromSong').onclick=()=>{metro.set({bpm:state.bpm,meter:'4'});q('#metronomeStatus').textContent=`예제 곡 ${state.bpm} BPM을 가져왔습니다.`;};
+  q('#metronomeToSong').onclick=()=>{
+    if(metro.config.meter!=='4')return;
+    pause();state.bpm=metro.config.bpm;persist();updateTransport();q('#songBpm').textContent=state.bpm;
+    q('#metronomeStatus').textContent=`예제 곡을 ${state.bpm} BPM으로 변경했습니다. 음표와 손 배정은 그대로입니다.`;
+  };
+  qa('[data-theme-choice]').forEach(button=>button.onclick=()=>{
+    const saved=window.PianoTheme.set(button.dataset.themeChoice);
+    q('#themeNote').textContent=saved?'선택한 테마를 기억합니다. 시스템 기본은 기기의 화면 모드를 따릅니다.':'브라우저 저장이 제한되어 이번 화면에서만 유지됩니다.';
+  });
+  const previousReset=q('#resetDemo').onclick;
+  q('#resetDemo').onclick=()=>{metro.stop();state.bpm=96;previousReset();q('#songBpm').textContent=state.bpm;};
+  document.addEventListener('keydown',event=>{
+    if(!q('#metronomeDialog').open)return;
+    event.stopImmediatePropagation();
+    if(/INPUT|SELECT|TEXTAREA/.test(event.target.tagName))return;
+    if(event.key==='Escape'){event.preventDefault();closeMetro();}
+    else if(event.code==='Space' && event.target.tagName!=='BUTTON'){event.preventDefault();metro.toggle();}
+    else if(event.key==='ArrowUp'||event.key==='ArrowDown'){event.preventDefault();metro.set({bpm:metro.config.bpm+(event.key==='ArrowUp'?1:-1)*(event.shiftKey?5:1)});}
+    else if(event.key.toLowerCase()==='t'){event.preventDefault();tap();}
+  },true);
+  // Native modal buttons keep their ordinary keyboard activation. Screen orientation does not restart audio.
+  window.PianoTheme.apply();update(metro.snapshot());q('#songBpm').textContent=state.bpm;
+  const previousDiagnostics=window.previewDiagnostics;
+  window.previewDiagnostics=()=>({...previousDiagnostics(),bpm:state.bpm,theme:window.PianoTheme.get(),metronome:metro.snapshot(),metronomeOpen:q('#metronomeDialog').open});
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,729 @@
+{
+  "scope": "Synthetic app DOM and simulated IndexedDB transactions; navigation is intercepted. Real IndexedDB and network navigation were not tested. Not the actual upstream audio/AI engine or a physical device.",
+  "checks": [
+    {
+      "name": "v1/phone_small current marker",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small exact destination",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v1/phone_small no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait current marker",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait exact destination",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_portrait no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape current marker",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape exact destination",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v1/iphone_landscape no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait current marker",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait exact destination",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_portrait no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape current marker",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape exact destination",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v1/ipad_landscape no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop current marker",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop exact destination",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v1/laptop no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small current marker",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small exact destination",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v2/phone_small no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait current marker",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait exact destination",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_portrait no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape current marker",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape exact destination",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v2/iphone_landscape no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait current marker",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait exact destination",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_portrait no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape current marker",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape exact destination",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v2/ipad_landscape no JavaScript errors",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop current marker",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop exact destination",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop current cannot reload",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop/dark bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop/dark page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop/light bounds",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop/light page no horizontal overflow",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop recording blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop processing blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop simulated transaction finishes before navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop navigation event destination",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop save failure blocks navigation",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop original record handler preserved",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop duplicate script safe",
+      "pass": true
+    },
+    {
+      "name": "v2/laptop no JavaScript errors",
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 180,
+    "passed": 180
+  }
+}

@@ -1,0 +1,24 @@
+test_01_patch_is_reversible (test_build.BuildTests.test_01_patch_is_reversible) ... ok
+test_02_namespace_separates_database_not_export (test_build.BuildTests.test_02_namespace_separates_database_not_export) ... ok
+test_03_double_patch_rejected (test_build.BuildTests.test_03_double_patch_rejected) ... ok
+test_04_missing_control_rejected (test_build.BuildTests.test_04_missing_control_rejected) ... ok
+test_05_preview_cannot_be_used_as_original (test_build.BuildTests.test_05_preview_cannot_be_used_as_original) ... ok
+test_06_wrong_database_anchor_rejected (test_build.BuildTests.test_06_wrong_database_anchor_rejected) ... ok
+test_07_full_fixture_build_preserves_source_and_assets (test_build.BuildTests.test_07_full_fixture_build_preserves_source_and_assets) ... ok
+test_08_output_never_overwritten (test_build.BuildTests.test_08_output_never_overwritten) ... ok
+test_09_reject_source_inside_output (test_build.BuildTests.test_09_reject_source_inside_output) ... ok
+test_10_missing_runtime_asset_rejected (test_build.BuildTests.test_10_missing_runtime_asset_rejected) ... ok
+test_11_git_verification_not_silently_skipped (test_build.BuildTests.test_11_git_verification_not_silently_skipped) ... fatal: not a git repository (or any of the parent directories): .git
+ok
+test_12_manifest_has_separate_name_and_relative_scope (test_build.BuildTests.test_12_manifest_has_separate_name_and_relative_scope) ... ok
+test_13_required_script_references_are_relative (test_build.BuildTests.test_13_required_script_references_are_relative) ... ok
+test_14_wrong_encoding_rejected (test_build.BuildTests.test_14_wrong_encoding_rejected) ... ok
+test_15_locked_revision_is_full_hash (test_build.BuildTests.test_15_locked_revision_is_full_hash) ... ok
+test_nav_does_not_rewire_recording (test_build.NavigationBuildTests.test_nav_does_not_rewire_recording) ... ok
+test_real_body_anchor_ignores_print_template (test_build.NavigationBuildTests.test_real_body_anchor_ignores_print_template) ... ok
+test_version_switch_config_and_assets (test_build.NavigationBuildTests.test_version_switch_config_and_assets) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.046s
+
+OK

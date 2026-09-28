@@ -1,0 +1,15 @@
+{
+  "repository": "bambabo-cmd/piano-studio",
+  "commit": "bd54de7e73274429c843aa0230623eaa1d700aa6",
+  "commit_date": "2026-09-27",
+  "runtime_files": [
+    "index.html",
+    "sw.js",
+    "manifest.webmanifest",
+    "icon-192.png",
+    "icon-512.png",
+    "bp.bundle.js",
+    "vexflow-bravura.js"
+  ],
+  "note": "Pinned original source, not a tracking reference to main."
+}

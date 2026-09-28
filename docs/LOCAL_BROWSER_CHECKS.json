@@ -1,0 +1,289 @@
+{
+  "scope": "Synthetic DOM/handler contract with in-memory localStorage simulation. No network navigation, upstream engine, real IndexedDB, browser service worker, microphone, or physical device execution.",
+  "checks": [
+    {
+      "name": "phone_portrait: dark is default with light system",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: original DOM and handlers unchanged",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: dock inside viewport",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: theme refreshes original canvas palette",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: system theme follows changed preference",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: independent start invokes original once",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: changing theme keeps metronome running",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: stop does not reload metronome",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: primary actions forwarded once",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: original export handler retained",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: project data unchanged",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: simulated v1 settings untouched",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: theme uses new storage key",
+      "pass": true
+    },
+    {
+      "name": "phone_portrait: no script errors",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: dark is default with light system",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: original DOM and handlers unchanged",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: dock inside viewport",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: theme refreshes original canvas palette",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: system theme follows changed preference",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: independent start invokes original once",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: changing theme keeps metronome running",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: stop does not reload metronome",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: primary actions forwarded once",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: original export handler retained",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: project data unchanged",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: simulated v1 settings untouched",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: theme uses new storage key",
+      "pass": true
+    },
+    {
+      "name": "phone_landscape: no script errors",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: dark is default with light system",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: original DOM and handlers unchanged",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: dock inside viewport",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: theme refreshes original canvas palette",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: system theme follows changed preference",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: independent start invokes original once",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: changing theme keeps metronome running",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: stop does not reload metronome",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: primary actions forwarded once",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: original export handler retained",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: project data unchanged",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: simulated v1 settings untouched",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: theme uses new storage key",
+      "pass": true
+    },
+    {
+      "name": "tablet_portrait: no script errors",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: dark is default with light system",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: original DOM and handlers unchanged",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: dock inside viewport",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: theme refreshes original canvas palette",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: system theme follows changed preference",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: independent start invokes original once",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: changing theme keeps metronome running",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: stop does not reload metronome",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: primary actions forwarded once",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: original export handler retained",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: project data unchanged",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: simulated v1 settings untouched",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: theme uses new storage key",
+      "pass": true
+    },
+    {
+      "name": "tablet_landscape: no script errors",
+      "pass": true
+    },
+    {
+      "name": "laptop: dark is default with light system",
+      "pass": true
+    },
+    {
+      "name": "laptop: original DOM and handlers unchanged",
+      "pass": true
+    },
+    {
+      "name": "laptop: dock inside viewport",
+      "pass": true
+    },
+    {
+      "name": "laptop: theme refreshes original canvas palette",
+      "pass": true
+    },
+    {
+      "name": "laptop: system theme follows changed preference",
+      "pass": true
+    },
+    {
+      "name": "laptop: independent start invokes original once",
+      "pass": true
+    },
+    {
+      "name": "laptop: changing theme keeps metronome running",
+      "pass": true
+    },
+    {
+      "name": "laptop: stop does not reload metronome",
+      "pass": true
+    },
+    {
+      "name": "laptop: primary actions forwarded once",
+      "pass": true
+    },
+    {
+      "name": "laptop: original export handler retained",
+      "pass": true
+    },
+    {
+      "name": "laptop: project data unchanged",
+      "pass": true
+    },
+    {
+      "name": "laptop: simulated v1 settings untouched",
+      "pass": true
+    },
+    {
+      "name": "laptop: theme uses new storage key",
+      "pass": true
+    },
+    {
+      "name": "laptop: no script errors",
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 70,
+    "passed": 70
+  }
+}

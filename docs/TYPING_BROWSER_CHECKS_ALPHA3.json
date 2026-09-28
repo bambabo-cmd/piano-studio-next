@@ -1,0 +1,103 @@
+{
+  "scope": "actual upstream manual-entry code + patched builders, synthetic app state/helpers; Chromium only; no deployed site/Safari/audio E2E",
+  "cases": [
+    {
+      "version": 1,
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": [
+        "compact_four_sequential_right_hand_notes",
+        "left_hand_and_octave_preserved",
+        "length_rest_and_half_length_preserved",
+        "play_position_preserved",
+        "invalid_input_inserts_nothing_and_keeps_dialog",
+        "cancel_does_not_modify_notes"
+      ],
+      "page_errors": []
+    },
+    {
+      "version": 1,
+      "viewport": [
+        844,
+        390
+      ],
+      "passed": [
+        "compact_four_sequential_right_hand_notes",
+        "left_hand_and_octave_preserved",
+        "length_rest_and_half_length_preserved",
+        "play_position_preserved",
+        "invalid_input_inserts_nothing_and_keeps_dialog",
+        "cancel_does_not_modify_notes"
+      ],
+      "page_errors": []
+    },
+    {
+      "version": 1,
+      "viewport": [
+        1366,
+        768
+      ],
+      "passed": [
+        "compact_four_sequential_right_hand_notes",
+        "left_hand_and_octave_preserved",
+        "length_rest_and_half_length_preserved",
+        "play_position_preserved",
+        "invalid_input_inserts_nothing_and_keeps_dialog",
+        "cancel_does_not_modify_notes"
+      ],
+      "page_errors": []
+    },
+    {
+      "version": 2,
+      "viewport": [
+        390,
+        844
+      ],
+      "passed": [
+        "compact_four_sequential_right_hand_notes",
+        "left_hand_and_octave_preserved",
+        "length_rest_and_half_length_preserved",
+        "play_position_preserved",
+        "invalid_input_inserts_nothing_and_keeps_dialog",
+        "cancel_does_not_modify_notes"
+      ],
+      "page_errors": []
+    },
+    {
+      "version": 2,
+      "viewport": [
+        844,
+        390
+      ],
+      "passed": [
+        "compact_four_sequential_right_hand_notes",
+        "left_hand_and_octave_preserved",
+        "length_rest_and_half_length_preserved",
+        "play_position_preserved",
+        "invalid_input_inserts_nothing_and_keeps_dialog",
+        "cancel_does_not_modify_notes"
+      ],
+      "page_errors": []
+    },
+    {
+      "version": 2,
+      "viewport": [
+        1366,
+        768
+      ],
+      "passed": [
+        "compact_four_sequential_right_hand_notes",
+        "left_hand_and_octave_preserved",
+        "length_rest_and_half_length_preserved",
+        "play_position_preserved",
+        "invalid_input_inserts_nothing_and_keeps_dialog",
+        "cancel_does_not_modify_notes"
+      ],
+      "page_errors": []
+    }
+  ],
+  "checks": 36,
+  "passed": true
+}
