@@ -123,7 +123,9 @@ def patch_html(raw: bytes) -> tuple[bytes, dict]:
         'typed_note_compact_korean_supported': True,
         'typed_note_insertion_and_hand_assignment_changed': False,
         'audio_and_recognition_algorithms_changed': False,
-        'full_responsive_preview_integrated': False,
+        'full_responsive_preview_integrated': True,
+        'main_ui_mode': 'approved-preview-live-main',
+        'main_ui_algorithm_changes': False,
     }
 
 def build(source: Path, out: Path, *, verify_source: bool = True) -> dict:
