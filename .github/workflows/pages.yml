@@ -1,0 +1,75 @@
+name: Build and deploy Piano Studio Next
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: piano-studio-next-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Piano Studio Next
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Guard repository target
+        run: test "$GITHUB_REPOSITORY" = "bambabo-cmd/piano-studio-next"
+      - name: Read locked upstream revision
+        id: upstream
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          c=json.load(open('upstream.json',encoding='utf-8'))
+          assert c['repository']=='bambabo-cmd/piano-studio'
+          assert re.fullmatch('[0-9a-f]{40}',c['commit'])
+          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as out:
+              out.write('repository='+c['repository']+'\ncommit='+c['commit']+'\n')
+          PY
+      - name: Retrieve original app and model assets (read only)
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ steps.upstream.outputs.repository }}
+          ref: ${{ steps.upstream.outputs.commit }}
+          path: .upstream
+          persist-credentials: false
+      - name: Run build and preservation unit tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Check service worker isolation (Node simulation)
+        run: node tests/sw_contract.cjs
+      - name: Build separate v2 runtime
+        run: python3 tools/build_site.py --upstream .upstream --output dist
+      - name: Check all runtime JavaScript syntax
+        run: python3 tools/check_scripts.py dist
+      - name: Save complete runnable files
+        uses: actions/upload-artifact@v4
+        with:
+          name: piano-studio-next-runtime
+          path: dist/
+          include-hidden-files: true
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
