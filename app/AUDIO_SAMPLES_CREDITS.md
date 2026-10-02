@@ -1,3 +1,44 @@
+# 우리집 연주실 2 — 음원 출처·이용 조건 alpha.16
+
+## 이번 추가: FluidR3 General MIDI 128 음색
+
+- SoundFont: **FluidR3_GM**, Frank Wen and Fluid SoundFont contributors.
+- Browser audio conversion/collection: **Benjamin Gleitzman and MIDI.js Soundfonts contributors**.
+- Collection: https://github.com/gleitz/midi-js-soundfonts
+- Fixed revision: `044fab8e1456bfafc5776e86dfd6bb8697149aef`.
+- Exact catalogue: https://github.com/gleitz/midi-js-soundfonts/blob/044fab8e1456bfafc5776e86dfd6bb8697149aef/FluidR3_GM/names.json
+- Collection licensing statement: https://github.com/gleitz/midi-js-soundfonts/blob/044fab8e1456bfafc5776e86dfd6bb8697149aef/README.md
+- Audio: **Creative Commons Attribution 3.0 United States (CC BY 3.0 US)**, as linked by the collection: https://creativecommons.org/licenses/by/3.0/us/
+- The audio license is not replaced by the repository's MIT code license.
+
+The app adds Korean names, family and app-version metadata, and plays the collection's pre-rendered MP3 notes through its Web Audio player. It does **not** implement a full SoundFont/SF2 renderer or include MIDI.js scripts. No external JavaScript from the sample repository is executed.
+
+Needed notes are fetched from the pinned revision through jsDelivr, with the matching raw.githubusercontent.com URL as a fallback. The upload ZIP contains player code and this attribution, not all external MP3s or the SF2 file. First-time loading requires an Internet connection; cache survival is browser-dependent.
+
+App adaptations: time scheduling, MIDI note/velocity application, playback-rate adjustment when needed, a simple filter/envelope, and a crossfaded sustain loop in a private buffer copy for sufficiently long sustained notes. Original files are not rewritten. FluidR3 files do not receive the older collection's per-note level normalization, so their relative input levels remain intact before the common note gain. The full original SoundFont velocity layers, modulators, controller programming, release samples and resonances are not reproduced by this simplified MP3 player. The audio may therefore differ from the SF2 played through FluidSynth/BASSMIDI.
+
+These are 128 **presets/timbres**, including electronic and sound-effect presets, not 128 distinct acoustic instruments. This catalogue does not include a full General MIDI channel-10 drum-kit engine, sung lyrics, sound-source separation, MT-32 emulation, or arbitrary user SF2 loading.
+
+Attribution does not imply endorsement by any creator. Keep this notice and in-app source links when redistributing the app. When distributing adapted source samples, retain the required attribution/license and indicate changes.
+
+## App version labels
+
+- `기존 v1`: 16 original generated sounds, preserved for existing songs.
+- `v2 α11 추가`: 20 note-recording instruments already included since alpha.11.
+- `v2 α16 추가 · FluidR3`: 128 presets added in this update.
+
+These labels are the time of inclusion in **this app**, not the library's publication date, sound quality ranking, or a claim that an old sound has become obsolete.
+
+## Verification boundary, alpha.16
+
+The 128-program catalogue, pinned repository revision and representative MP3 resource paths were checked against upstream. Actual downloadable piano C4 / woodblock C4 / electric piano Db4 resources were confirmed through GitHub. The runtime environment could not download external audio into the browser: decoding/scheduling tests instead use explicit generated WAV responses at these addresses. **Actual FluidR3 timbre, live CDN delivery and physical speaker/Safari playback were not auditioned or certified.** Test audio and test response routing are absent from the upload file.
+
+---
+
+## Preserved credits for the previous 20-instrument collection
+
+The following original attribution remains applicable. Its verification statement describes the previous work and must be read together with the alpha.16 statement above.
+
 # Instrument sample credits — Piano Studio Next alpha.11
 
 ## Source collection and license
