@@ -1,0 +1,17 @@
+/* One replaceable GME engine per worker. Ending the worker releases its WASM heap.
+ * Only selected local bytes enter it; no uploads, no arbitrary filesystem reads.
+ */
+let M=null,ptr=0,pcm=0,last=null;
+const send=(type,payload={},transfer=[])=>postMessage({type,...payload},transfer);
+function check(code){if(code!==0)throw Error(M.UTF8ToString(M._psn_error())||'게임 음악 엔진 오류');}
+function text(p){return p?M.UTF8ToString(p):'';}
+function close(){if(M){M._psn_close();if(ptr)M._free(ptr);if(pcm)M._free(pcm);}ptr=pcm=0;last=null;}
+async function load(url){if(M)return;const {default:factory}=await import(url);M=await factory({locateFile:p=>new URL(p,url).href,print:()=>{},printErr:s=>send('engine-log',{message:String(s).slice(0,250)})});for(const key of ['_psn_open','_psn_start','_psn_render','_psn_voices','_psn_info','_malloc','_free'])if(typeof M[key]!=='function')throw Error('게임 음악 엔진 빌드가 맞지 않습니다: '+key);}
+let working=false;
+onmessage=async({data:d})=>{if(working)return send('error',{id:d.id,message:'이미 처리 중인 요청입니다.'});working=true;try{
+ if(d.command==='open'){await load(d.engineURL);close();const b=d.bytes instanceof Uint8Array?d.bytes:new Uint8Array(d.bytes);if(b.length>32*1024*1024)throw Error('게임 파일 32MiB 제한');ptr=M._malloc(b.length);if(!ptr)throw Error('게임 입력 메모리 부족');M.HEAPU8.set(b,ptr);check(M._psn_open(ptr,b.length,32000));M._free(ptr);ptr=0;pcm=M._malloc(16384*4);if(!pcm)throw Error('게임 출력 메모리 부족');last={format:d.format,subsong:0};const voices=Array.from({length:M._psn_voices()},(_,i)=>({index:i,name:text(M._psn_voice_name(i))||'채널 '+(i+1)}));const count=M._psn_tracks();check(M._psn_info(Math.max(0,Math.min(count-1,d.song||0))));send('opened',{id:d.id,songs:count,voices,system:text(M._psn_info_text(0)),game:text(M._psn_info_text(1)),title:text(M._psn_info_text(2)),artist:text(M._psn_info_text(3)),length:M._psn_info_ms(0),sampleRate:32000,warning:text(M._psn_warning())});}
+ else if(d.command==='render'){if(!M||!last)throw Error('파일이 열리지 않았습니다.');const start=Number(d.start),seconds=Number(d.seconds),voice=Number(d.voice),song=Number(d.song);if(!Number.isFinite(start)||start<0||start>600||!Number.isFinite(seconds)||seconds<=0||seconds>180||!Number.isInteger(song)||!Number.isInteger(voice))throw Error('구간·곡·채널 설정 오류');check(M._psn_start(song,voice,d.dry?1:0));const skip=Math.round(start*32000),frames=Math.round(seconds*32000);let done=0,peak=0,power=0;while(done<skip){const n=Math.min(16384,skip-done);check(M._psn_render(pcm,n));done+=n;if(done%65536===0){send('progress',{id:d.id,phase:'seek',value:done/Math.max(skip,1)});await new Promise(r=>setTimeout(r,0));}}
+ done=0;while(done<frames){const n=Math.min(8192,frames-done);check(M._psn_render(pcm,n));const samples=M.HEAP16.subarray(pcm>>1,(pcm>>1)+n*2),out=new Int16Array(samples);for(let i=0;i<samples.length;i++){const v=samples[i]/32768;peak=Math.max(peak,Math.abs(v));power+=v*v;}send('pcm',{id:d.id,bytes:out.buffer,frames:n},[out.buffer]);done+=n;if(done%32768===0){send('progress',{id:d.id,phase:'render',value:done/frames});await new Promise(r=>setTimeout(r,0));}}send('rendered',{id:d.id,frames,sampleRate:32000,channels:2,peak,rms:Math.sqrt(power/(frames*2)),voice,song,start,seconds,dry:!!d.dry,warning:text(M._psn_warning())});}
+ else if(d.command==='close'){close();send('closed',{id:d.id});}
+ else throw Error('알 수 없는 작업');
+ }catch(e){send('error',{id:d.id,message:String(e?.message||e)});}finally{working=false;}};

@@ -148,7 +148,7 @@ def build(source: Path, out: Path, *, verify_source: bool = True) -> dict:
                     id='./', start_url='./', scope='./', display='standalone',
                     background_color='#11151F', theme_color='#11151F')
     inputs = patched + json.dumps(manifest, ensure_ascii=False).encode('utf-8')
-    for file in sorted((ROOT / 'app').glob('*')):
+    for file in sorted((ROOT / 'app').rglob('*')):
         if file.is_file():
             inputs += file.read_bytes()
     build_id = VERSION + '-' + digest(inputs)[:12]
@@ -158,6 +158,12 @@ def build(source: Path, out: Path, *, verify_source: bool = True) -> dict:
             shutil.copy2(source / name, out / name)
         (out / 'index.html').write_bytes(patched)
         shutil.copytree(ROOT / 'app', out / 'app', ignore=shutil.ignore_patterns('sw.js'))
+        # Build the real engine before publishing; failure aborts this deployment.
+        retro_spec = importlib.util.spec_from_file_location('piano_retro_builder', ROOT/'app'/'retro'/'build_retro.py')
+        retro_builder = importlib.util.module_from_spec(retro_spec)
+        retro_spec.loader.exec_module(retro_builder)
+        retro_report = (retro_builder.prepare(out/'app'/'retro') if verify_source else
+                        {'skipped': 'synthetic build fixture only', 'emulator_test_passed': False})
         shutil.copytree(ROOT / 'preview', out / 'preview')
         (out / 'manifest.webmanifest').write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
@@ -165,7 +171,7 @@ def build(source: Path, out: Path, *, verify_source: bool = True) -> dict:
                                   .replace('__BUILD_ID__', build_id), encoding='utf-8')
         (out / '.nojekyll').write_text('', encoding='utf-8')
         report = {
-            'version': VERSION, 'build_id': build_id,
+            'version': VERSION, 'build_id': build_id, 'retro_engine': retro_report,
             'upstream_repository': CONFIG['repository'], 'upstream_commit': commit,
             'upstream_git_verified': verify_source, 'source_files': before,
             'html_patch': patch_report,

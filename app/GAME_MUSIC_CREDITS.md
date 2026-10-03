@@ -1,4 +1,26 @@
-# Game music import · alpha.20
+# alpha.22 additions — composing with imported game samples
+
+The app reads standard SPC snapshot/DSP sample-directory/BRR data without matching a game driver.
+It stores BRR/VAG or generated PCM, loop boundaries, tuning provenance and approximate sampler envelopes.
+This is not a full console DSP emulation, a universal sequence-to-MIDI converter, or a claim that
+all game instruments have authoritative names and tuning information. Original uploaded files
+are read locally; no commercial game samples are included in this public update ZIP.
+
+The built-in NES/GB/PCE-style patches are generated waveform recreations, not vendor ROM dumps.
+The existing VAB decoder and program layout use the documented PS1 structures from VGMTrans.
+BRR arithmetic was checked against S-DSP documentation and Game Music Emu's published implementation.
+
+Primary technical references:
+- https://snes.nesdev.org/wiki/BRR_samples
+- https://snes.nesdev.org/wiki/S-DSP_registers
+- https://github.com/libgme/game-music-emu/blob/dd3182a8bdae3ff761438632aace418fbcaed439/gme/Spc_Dsp.cpp
+- https://github.com/vgmtrans/vgmtrans/blob/master/src/main/formats/PS1/Vab.cpp
+- https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer
+- https://developer.mozilla.org/en-US/docs/Web/API/Storage_API/Storage_quotas_and_eviction_criteria
+
+## Existing alpha.21 components and notices (retained)
+
+# Game music import · alpha.21 (alpha.20 direct parser retained)
 
 ## Runtime scope
 
@@ -48,10 +70,39 @@ freely, subject to the following restrictions:
     3. This notice may not be removed or altered from any source
     distribution.
 
-## Independent test engine, not shipped in the app
+## Historical alpha.20 independent test engine
 
 The separate native reference test uses the environment's Game Music Emu (`libgme.so.0`)
 to render eight actual SPC DSP channels independently. This is a playback/voice sanity test,
 not proof that all note/control effects match a cycle-exact emulator. No libgme binary or
 native helper is required by the web importer.
 - https://github.com/libgme/game-music-emu
+
+
+## alpha.21 — replaceable Game Music Emu worker backend
+
+The additional importer renders chip output channels (sometimes a channel group), not
+original sequence note events. It can optionally run the existing Basic Pitch on each
+selected pitched channel. Original FF6 direct parsing above is unchanged.
+
+- Library: Game Music Emu, Shay Green and contributors. LGPL 2.1 or later.
+- Source: https://github.com/libgme/game-music-emu
+- Pinned build commit: dd3182a8bdae3ff761438632aace418fbcaed439
+- Compiler bootstrap: official Emscripten SDK 3.1.64, https://github.com/emscripten-core/emsdk
+- The generated module, license text and corresponding source archive are served
+  under app/retro. The C ABI wrapper, worker and build script are included for rebuilding.
+- The frontend uses its own bounded file adapters and the Worker PCM protocol.
+- The GME library uses its Nuked YM2612 option, not its MAME option.
+- VGM importer supports SN76489/YM2612 commands; rejects unsupported chips,
+  including YM2413 (the pinned GME VGM source has a disabled YM2413 wrapper).
+
+## VAB bank reader
+
+This new original JS bank reader was cross-checked against VGMTrans Vab.cpp
+(Git blob 1193e190d90d88033e6560c19d584f30518f094b) and the PSX-SPX documentation.
+It decodes PS1 ADPCM samples and displays region/sample references, not a song sequence.
+- https://github.com/vgmtrans/vgmtrans/blob/master/src/main/formats/PS1/Vab.cpp
+- https://psx-spx.consoledev.net/cdromfileformats/
+
+PSF, GSF and 2SF emulators are not included in alpha.21; only container and
+required companion-file checks are present. No copyrighted BIOS is supplied.
