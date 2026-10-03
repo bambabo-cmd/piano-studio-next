@@ -89,6 +89,10 @@ def patch_html(raw: bytes) -> tuple[bytes, dict]:
     if "setProject(loaded||newProject('첫 번째 곡')); if(!loaded) saveNow();" in text:
         replace("setProject(loaded||newProject('첫 번째 곡')); if(!loaded) saveNow();",
                 'if(loaded) setProject(loaded); else { const fresh=newProject(); fresh._psnUnsavedBlank=true; setProject(fresh); }', exact=1)
+    # alpha.27: closing the editor is not deletion; preserve a closed-editor marker on reload.
+    if "if(!loaded){ const all=await DB.all('projects');" in text:
+        replace("if(!loaded){ const all=await DB.all('projects');",
+                "if(!loaded&&last!=='__psn_editor_closed__'){ const all=await DB.all('projects');", exact=1)
     # Original localStorage keys include both fixed strings and 'hps-'+cls.
     replace("'hps-", "'psn-v2-")
     if '"hps-' in text:
@@ -148,6 +152,8 @@ def build(source: Path, out: Path, *, verify_source: bool = True) -> dict:
     patched, patch_report = patch_html((source / 'index.html').read_bytes())
     if verify_source and b'fresh._psnUnsavedBlank=true' not in patched:
         raise ValueError('Required alpha.24 blank-library startup guard is missing.')
+    if verify_source and b"if(!loaded&&last!=='__psn_editor_closed__')" not in patched:
+        raise ValueError('Required alpha.27 closed-editor startup guard is missing.')
     manifest = json.loads((source / 'manifest.webmanifest').read_text(encoding='utf-8'))
     manifest.update(name='우리집 연주실 2', short_name='연주실 2',
                     description='Piano Studio Next — 녹음·채보·편집·메트로놈. v2 초기 개발판.',
