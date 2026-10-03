@@ -1,0 +1,43 @@
+{
+  "gme_commit": "dd3182a8bdae3ff761438632aace418fbcaed439",
+  "build_key": "e2534443c89ff19b32e24d6c8495b896190c9104728970c982fedb4abd47b589",
+  "emsdk_requested": "3.1.64",
+  "compiler_version": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.64 (a1fe3902bf73a3802eae0357d273d0e37ea79898)",
+  "engine_sha256": "7592b9dac0e4869ebc8eda165d9f4cb8814d44baf473441bf42347f7a070e4a6",
+  "wasm_bytes": 265160,
+  "exports": [
+    "malloc",
+    "free",
+    "psn_error",
+    "psn_close",
+    "psn_open",
+    "psn_tracks",
+    "psn_voices",
+    "psn_voice_name",
+    "psn_info",
+    "psn_info_text",
+    "psn_info_ms",
+    "psn_warning",
+    "psn_start",
+    "psn_render"
+  ],
+  "formats": [
+    "SPC",
+    "NSF",
+    "NSFE",
+    "GBS",
+    "HES",
+    "VGM",
+    "VGZ"
+  ],
+  "method": "chip-channel PCM, not sequence-note extraction",
+  "files": {
+    "gme-engine.mjs": "afef4b69be4bca36a4742b5b38904a73ff99e6a1902257eecea1f7dccd86df02",
+    "gme-engine.wasm": "7592b9dac0e4869ebc8eda165d9f4cb8814d44baf473441bf42347f7a070e4a6",
+    "gme-corresponding-source.zip": "bb1e8c666896009926e3a7b5a372ef9f9d13ba7ff8249fcdc3868904b882056d",
+    "gme-license.txt": "d2efc89fbb7533572a472d34e07964951810a3a4f8d3159ecc2dcaa1452c5c26",
+    "gme-readme.txt": "ebb2ccb9a60e178b24cbd815d187cbfd6d30fbda04cfc09346bbaf84e6b936bc"
+  },
+  "original_generated_loader_sha256": "f78ea8f5a7a6aa3ee1c48c2008c3bfe1ff91533d498d784f69c688426c28f501",
+  "loader_patch": "Conditional Node built-in import in browser-compatible module"
+}

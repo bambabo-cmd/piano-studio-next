@@ -106,3 +106,17 @@ It decodes PS1 ADPCM samples and displays region/sample references, not a song s
 
 PSF, GSF and 2SF emulators are not included in alpha.21; only container and
 required companion-file checks are present. No copyrighted BIOS is supplied.
+
+## alpha.25 changes
+The positively identified AKAO-SNES direct note reader now includes FF5 v3 in addition
+to FF6 v4. Driver signatures, v3 opcode semantics, durations and relocation follow the
+VGMTrans AkaoSnesScanner.cpp and AkaoSnesSeq.cpp cited above. This is an altered JavaScript
+implementation, not the VGMTrans application or a universal sequence decoder.
+
+The GME binary and full corresponding source were recovered from Piano Studio Next's
+successful own build 37095556195, artifact 11264765093 (commit 3bd7e37f25b50eafd95db738e7d0039e6dd48809).
+The binary is unchanged. Its generated JavaScript loader has an explicitly marked correction:
+Node built-ins are imported dynamically only under Node, not unconditionally in a browser Worker.
+The bundle includes the modified readable loader, source archive, original library license,
+checksums and repeatable actual-WASM tests. These app integration changes do not imply that
+we wrote Game Music Emu, VGMTrans or their reverse-engineering work.

@@ -1,0 +1,4 @@
+{
+  "googleClientId": "",
+  "note": "Optional public OAuth web client ID. Never put client secrets or tokens here."
+}

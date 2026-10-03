@@ -85,6 +85,10 @@ def patch_html(raw: bytes) -> tuple[bytes, dict]:
             'name="apple-mobile-web-app-title" content="우리집 연주실 2"', exact=1)
     replace("indexedDB.open('home-piano-studio',1)",
             "indexedDB.open('piano-studio-next-v2',1)", exact=1)
+    # alpha.24: empty library stays empty until an explicit new/edit/save action.
+    if "setProject(loaded||newProject('첫 번째 곡')); if(!loaded) saveNow();" in text:
+        replace("setProject(loaded||newProject('첫 번째 곡')); if(!loaded) saveNow();",
+                'if(loaded) setProject(loaded); else { const fresh=newProject(); fresh._psnUnsavedBlank=true; setProject(fresh); }', exact=1)
     # Original localStorage keys include both fixed strings and 'hps-'+cls.
     replace("'hps-", "'psn-v2-")
     if '"hps-' in text:
@@ -142,6 +146,8 @@ def build(source: Path, out: Path, *, verify_source: bool = True) -> dict:
             raise ValueError(f'Missing/non-regular original runtime asset: {name}')
         before[name] = digest(file.read_bytes())
     patched, patch_report = patch_html((source / 'index.html').read_bytes())
+    if verify_source and b'fresh._psnUnsavedBlank=true' not in patched:
+        raise ValueError('Required alpha.24 blank-library startup guard is missing.')
     manifest = json.loads((source / 'manifest.webmanifest').read_text(encoding='utf-8'))
     manifest.update(name='우리집 연주실 2', short_name='연주실 2',
                     description='Piano Studio Next — 녹음·채보·편집·메트로놈. v2 초기 개발판.',
