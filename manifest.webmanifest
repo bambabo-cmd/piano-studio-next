@@ -1,0 +1,16 @@
+{
+  "name": "우리집 연주실",
+  "short_name": "연주실",
+  "description": "연주를 녹음해 악보로 만들고, 악기를 골라 여러 트랙을 함께 재생해요.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F4F6FB",
+  "theme_color": "#E0344A",
+  "lang": "ko",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

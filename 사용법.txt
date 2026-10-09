@@ -1,0 +1,37 @@
+우리집 연주실 - 단독 실행판
+=====================================
+
+[A] PC에서 쓰기 (가장 간단, 설치 없음)
+ 1. index.html 을 크롬 또는 엣지로 엽니다. (파일을 브라우저 창에 끌어다 놓아도 됨)
+ 2. 즐겨찾기에 추가해 두면 편합니다.
+ - 곡은 그 브라우저 안에 저장됩니다. 파일 위치를 옮기면 저장된 곡이 안 보일 수 있으니
+   폴더를 한 곳에 고정해 두고, 가끔 '파일 → 곡 파일 저장'으로 백업하세요.
+ - 인터넷이 없으면 글꼴만 기본 글꼴로 바뀌고 기능은 그대로 동작합니다.
+
+[B] 휴대폰에서 앱처럼 쓰기 (무료 웹 호스팅 + 홈 화면 추가)
+ 휴대폰은 보안 정책상 내려받은 html 파일에서 마이크/저장이 잘 안 됩니다.
+ 그래서 이 폴더를 https 주소에 한 번 올려 두고 '홈 화면에 추가'하는 방식을 권합니다.
+ 한 번 열고 나면 인터넷 없이도 실행됩니다(오프라인 캐시).
+
+ [자동] github-upload.ps1 (윈도우) / github-upload.sh (맥)
+   - 처음 한 번 git, GitHub CLI 설치:  winget install --id Git.Git  /  winget install --id GitHub.cli
+   - 스크립트를 실행하면 브라우저로 GitHub 로그인 → 저장소 생성 → 업로드 → Pages 켜기까지 자동.
+   - 새 버전으로 업데이트할 때도 같은 폴더에서 다시 실행하면 됩니다.
+   - 토큰을 직접 복사하거나 붙여 넣을 필요가 없습니다(GitHub CLI 로그인 사용).
+
+ [수동] GitHub Pages (무료, GitHub 계정 필요):
+ 1. github.com 에서 새 저장소(New repository) 만들기. 예: piano-studio, Public 선택
+ 2. 'uploading an existing file' 을 눌러 이 폴더의 파일 7개(index.html, manifest.webmanifest, bp.bundle.js, vexflow-bravura.js,
+    sw.js, icon-192.png, icon-512.png)를 올리고 Commit
+ 3. 저장소 Settings → Pages → Branch 를 main / (root) 로 저장
+ 4. 1~2분 뒤 https://<아이디>.github.io/piano-studio/ 로 접속
+ 5. 휴대폰 크롬: 메뉴 → '홈 화면에 추가' / 아이폰 사파리: 공유 → '홈 화면에 추가'
+
+[기존 곡 옮기기]
+ Claude 안에서 쓰던 곡은 이 판과 저장 공간이 따로입니다.
+ Claude 쪽에서 '파일 → 곡 파일 저장(원음 포함)' → 새 판에서 '파일 → 곡 파일 불러오기'.
+
+[참고]
+ - MIDI 케이블 입력: PC 크롬/엣지, 안드로이드 크롬에서 동작. 아이폰 사파리는 미지원.
+ - 모든 기능이 이 파일 하나(index.html)에 들어 있으며 외부 서버로 데이터를 보내지 않습니다.
+   (예외: 인터넷이 될 때 글꼴을 Google Fonts에서 받아옴)
