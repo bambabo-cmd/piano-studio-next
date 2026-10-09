@@ -95,7 +95,7 @@ h2{font-family:Jua,sans-serif;font-weight:400;font-size:20px;margin:6px 0 8px}
 .analysis label{display:flex;align-items:center;gap:6px}
 .overlay{position:fixed;inset:0;background:rgba(10,14,25,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
 .overlay[hidden]{display:none}
-.panel{background:var(--panel);border-radius:18px;padding:20px 22px;min-width:260px;max-width:min(560px,100%);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.panel{background:var(--panel);border-radius:18px;padding:20px 22px;min-width:260px;max-width:min(760px,100%);max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.3)}
 .panel progress{width:100%;margin-top:12px}
 .panel .row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
 #toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:14px;max-width:92vw;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
@@ -268,7 +268,7 @@ body.roll-folded .editor .toolbar,body.roll-folded .editor .tempo,body.roll-fold
  </section>
 
  <section class="editor">
-  <div class="sec-head"><h2 id="edTitle">악보판</h2><div style="display:flex;gap:6px"><button id="shOpen">🎼 악보로 보기·저장</button><button id="rollToggle" class="fold" title="악보판 접기/펼치기">▲ 접기</button></div></div>
+  <div class="sec-head"><h2 id="edTitle">악보판</h2><div style="display:flex;gap:6px"><button id="shOpen">🎼 악보로 보기·저장</button><button id="titleFind2">🔎 제목 찾기</button><button id="rollToggle" class="fold" title="악보판 접기/펼치기">▲ 접기</button></div></div>
   <div class="toolbar">
    <div class="seg" role="group" aria-label="편집 도구">
     <button data-mode="select" class="on">선택·이동</button><button data-mode="draw">그리기</button><button data-mode="erase">지우기</button><button data-mode="range">구간</button>
@@ -1824,18 +1824,26 @@ function openTitleFinder(){ const t=activeTrack(); if(!t||!t.notes.length){ toas
   const hits=findTitles(t); const lbl=s=>s>=.8?'거의 확실':s>=.65?'비슷해요':'조금 비슷';
   const hitHtml=!hits.length?'<div class="hint">음표가 5개 이상 있어야 찾을 수 있어요.</div>':hits[0].sim<.5?'<div class="hint">앱에 들어 있는 곡 중에는 비슷한 곡이 없어요. 아래 인터넷 검색을 써 보세요.</div>':
     `<div class="sug-list">${hits.filter(h=>h.sim>=.5).map((h,i)=>`<label><b>${esc(h.name)}</b> <span class="hint">${h.cat} · ${Math.round(h.sim*100)}% ${lbl(h.sim)}</span><button class="pv useT" data-n="${esc(h.name)}">곡 이름으로</button></label>`).join('')}</div>`;
+  const contour=a.parsons.replace(/^\*/,'').slice(0,30); const musiUrl='https://www.musipedia.org/'+contour;
   const summary=`[멜로디 계이름 · 다장조/가단조로 옮김, 한 글자=${unitStr(c.unit)}, -는 더 길게, 쉼=쉼표]\n${c.text}\n\n[원래 조: ${a.key}, 빠르기 ${a.bpm} BPM, 음 ${a.count}개]\n[높낮이 기호(Parsons code): ${a.parsons}]\n이 멜로디는 무슨 곡인가요? 제목과 작곡가를 알려 주세요.`;
   showOverlay('',null); const msg=$('#ovMsg'); msg.innerHTML=`<b>제목 찾기</b>
    <div style="margin:8px 0 4px"><b>① 앱 안에서 찾기</b> <span class="hint">(인터넷 필요 없음 · 동요·캐럴·민요·유명 클래식 ${SONG_DB.length}곡)</span></div>${hitHtml}
-   <div style="margin:12px 0 4px"><b>② 인터넷에서 찾기</b> <span class="hint">(무료 · 로그인 없음)</span></div>
-   <div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><a id="tfGoogle" target="_blank" rel="noopener"><button>구글에서 계이름으로 검색</button></a><a href="https://www.musipedia.org/" target="_blank" rel="noopener"><button>Musipedia (멜로디 검색 사이트)</button></a><button id="tfParsons">높낮이 기호 복사</button></div>
-   <div class="hint" style="margin-top:4px">Musipedia에서는 ‘Parsons code’ 칸에 복사한 높낮이 기호(<code>${esc(a.parsons.slice(0,16))}…</code>)를 붙여 넣으면 돼요.</div>
+   <div style="margin:12px 0 4px"><b>② 인터넷에서 찾기</b> <span class="hint">(Musipedia 멜로디 검색 · 무료 · 로그인 없음)</span></div>
+   <div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><button id="tfMusi" class="on">인터넷에서 이 멜로디 찾기</button><a id="tfMusiOpen" target="_blank" rel="noopener" href="${musiUrl}"><button>새 창에서 열기</button></a><a id="tfGoogle" target="_blank" rel="noopener"><button>구글 계이름 검색</button></a><button id="tfParsons">높낮이 기호 복사</button></div>
+   <div id="tfMusiBox" style="margin-top:8px"></div>
    <details style="margin-top:12px"><summary class="hint" style="cursor:pointer">③ (선택) AI 챗봇에게 물어볼 글 만들기</summary>
    <textarea id="tfText" rows="6" readonly style="width:100%;margin-top:6px;font:13px/1.5 ui-monospace,monospace;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:inherit">${esc(summary)}</textarea>
    <div class="row" style="justify-content:flex-start;margin-top:6px"><button id="tfCopy">글 복사하기</button></div></details>`;
   $('#tfGoogle').href='https://www.google.com/search?q='+encodeURIComponent('계이름 '+c.text.split(' ').slice(0,12).join(' '));
   const cp=async(txt,ok)=>{ try{ await navigator.clipboard.writeText(txt); toast(ok); }catch(e){ toast('복사가 막혀 있어요. 글을 길게 눌러 직접 복사해 주세요.'); } };
-  $('#tfParsons').onclick=()=>cp(a.parsons,'높낮이 기호를 복사했어요.'); $('#tfCopy').onclick=()=>cp(summary,'복사했어요.');
+  $('#tfParsons').onclick=()=>cp(a.parsons,'높낮이 기호를 복사했어요.');
+  $('#tfMusi').onclick=async()=>{ const box=$('#tfMusiBox'); box.innerHTML='<div class="hint">인터넷에서 찾는 중…</div>';
+    if(!navigator.onLine){ box.innerHTML='<div class="hint">지금은 인터넷에 연결돼 있지 않아요. 연결 후 다시 눌러 주세요.</div>'; return; }
+    let shown=false;
+    try{ const r=await fetch(musiUrl,{mode:'cors'}); if(r.ok){ const html=await r.text(); const doc=new DOMParser().parseFromString(html,'text/html'); const items=[]; doc.querySelectorAll('a[href]').forEach(x=>{ const tx=(x.textContent||'').trim(); const h=x.getAttribute('href')||''; if(tx.length>3&&/\/(tune|song|melody|[0-9]{3,})/i.test(h)&&!items.some(i=>i.t===tx)) items.push({t:tx,h:new URL(h,musiUrl).href}); });
+      if(items.length){ box.innerHTML='<div class="sug-list">'+items.slice(0,8).map(i=>`<label><a href="${i.h}" target="_blank" rel="noopener">${esc(i.t)}</a><button class="pv useT" data-n="${esc(i.t)}">곡 이름으로</button></label>`).join('')+'</div><div class="hint" style="margin-top:4px">Musipedia 검색 결과예요. 높낮이 순서만으로 찾는 거라 비슷한 곡이 섞여 나올 수 있어요.</div>'; shown=true; } } }catch(e){}
+    if(!shown){ box.innerHTML=`<div class="hint" style="margin-bottom:6px">검색 결과 페이지를 아래에 띄웠어요. 비어 있으면 ‘새 창에서 열기’를 눌러 주세요.</div><iframe src="${musiUrl}" style="width:100%;height:min(60vh,520px);border:1px solid var(--line);border-radius:10px;background:#fff" referrerpolicy="no-referrer"></iframe>`; }
+    msg.querySelectorAll('.useT').forEach(b=>b.onclick=()=>{ project.name=b.dataset.n; $('#songName').value=project.name; scheduleSave(); refreshSongList(); hideOverlay(); msg.innerHTML=''; toast(`곡 이름을 ‘${project.name}’으로 바꿨어요.`); }); }; $('#tfCopy').onclick=()=>cp(summary,'복사했어요.');
   msg.querySelectorAll('.useT').forEach(b=>b.onclick=()=>{ project.name=b.dataset.n; $('#songName').value=project.name; scheduleSave(); refreshSongList(); hideOverlay(); msg.innerHTML=''; toast(`곡 이름을 ‘${project.name}’으로 바꿨어요.`); });
   const bx=$('#ovBtns'); const o=document.createElement('button'); o.textContent='닫기'; o.className='on'; o.onclick=()=>{ hideOverlay(); msg.innerHTML=''; }; bx.append(o); }
 
@@ -1878,7 +1886,7 @@ async function init(){
   try{ const v=localStorage.getItem('hps-autosave'); if(v!==null) $('#autoSaveRec').checked=v==='1'; }catch(e){}
   $('#autoSaveRec').onchange=e=>{ try{ localStorage.setItem('hps-autosave',e.target.checked?'1':'0'); }catch(_){} };
   $('#recDirBtn').onclick=pickRecDir;
-  $('#titleFind').onclick=()=>{ closeMenu(); openTitleFinder(); }; $('#tTitle').onclick=openTitleFinder;
+  $('#titleFind').onclick=()=>{ closeMenu(); openTitleFinder(); }; $('#titleFind2').onclick=openTitleFinder; $('#tTitle').onclick=openTitleFinder;
   $('#newTrackBtn').onclick=newEmptyTrack; $('#typeBtn').onclick=openTypeEntry;
   const setFold=(cls,on,btn,label)=>{ document.body.classList.toggle(cls,on); $(btn).textContent=on?'▼ 펼치기':'▲ 접기'; try{ localStorage.setItem('hps-'+cls,on?'1':'0'); }catch(e){} if(cls==='roll-folded'&&!on) setTimeout(resizeRoll,0); };
   $('#deckToggle').onclick=()=>setFold('deck-folded',!document.body.classList.contains('deck-folded'),'#deckToggle');
