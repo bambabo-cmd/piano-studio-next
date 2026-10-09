@@ -8,8 +8,8 @@ const SHELL = [
   './', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   './bp.bundle.js', './vexflow-bravura.js', './app/theme.js',
   './app/original-addon.js', './app/original-addon.css', './app/title-finder.js', './app/next-boot.js',
-  './app/version-switch.js', './app/version-switch.css'
-].map(path => new URL(path, ROOT).href);
+  './app/version-switch.js', './app/version-switch.css', './app/library.js'
+].concat("__LIBRARY_FILES__").map(path => new URL(path, ROOT).href);
 const KNOWN = new Set(SHELL);
 self.addEventListener('install', event => {
   // An existing app keeps its current worker until all its tabs are closed.

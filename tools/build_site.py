@@ -107,6 +107,7 @@ def patch_html(raw: bytes) -> tuple[bytes, dict]:
     text = text[:pos] + head + text[pos:]
     body = (BODY_A + '<script src="./app/original-addon.js"></script>\n'
             '<script src="./app/title-finder.js"></script>\n'
+            '<script src="./app/library.js"></script>\n'
             '<script src="./app/next-boot.js"></script>\n'
             '<script src="./app/version-switch.js" data-current-version="2"></script>\n' + BODY_B)
     pos = closing_offset(text, 'body')
@@ -180,8 +181,10 @@ def build(source: Path, out: Path, *, verify_source: bool = True) -> dict:
         shutil.copytree(ROOT / 'preview', out / 'preview')
         (out / 'manifest.webmanifest').write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        lib_files = sorted('./app/library/' + p.name for p in (ROOT / 'app' / 'library').glob('*.json')) if (ROOT / 'app' / 'library').is_dir() else []
         (out / 'sw.js').write_text((ROOT / 'app' / 'sw.js').read_text(encoding='utf-8')
-                                  .replace('__BUILD_ID__', build_id), encoding='utf-8')
+                                  .replace('__BUILD_ID__', build_id)
+                                  .replace('"__LIBRARY_FILES__"', json.dumps(lib_files)), encoding='utf-8')
         (out / '.nojekyll').write_text('', encoding='utf-8')
         report = {
             'version': VERSION, 'build_id': build_id, 'retro_engine': retro_report,

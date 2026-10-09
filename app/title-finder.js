@@ -67,7 +67,11 @@ var PSN_SONG_DB=[
  ['The Wheels on the Bus','동요',[60,65,65,65,65,69,72,69,65,67,64,60,64,67]],
  ['Au Clair de la Lune','동요',[60,60,60,62,64,62,60,64,62,62,60]],
  ['This Old Man','동요',[67,64,67,67,64,67,69,67,65,64,62,64,65]],
+ ['유모레스크 (드보르자크) · P-70 #42','클래식',[66,68,70,73,70,68,66,68,70,73,75,73,70,68,66,68,70,73,70,68,66]],
 ];
+var PSN_DICT=[];
+async function psnDictLoad(){ try{ const v=await DB.get('meta','songDict'); PSN_DICT=Array.isArray(v)?v:[]; }catch(e){ PSN_DICT=[]; } return PSN_DICT; }
+async function psnDictSave(){ try{ await DB.put('meta',PSN_DICT,'songDict'); return true; }catch(e){ toast('곡 사전을 저장하지 못했어요.'); return false; } }
 function intervalsOf(ps){ const r=[]; for(let i=1;i<ps.length;i++) r.push(ps[i]-ps[i-1]); return r; }
 var foldIv=i=>{ let f=((i%12)+12)%12; if(f>6) f-=12; return f; };
 function ivCost(a,b){ if(a===b) return 0; const sa=Math.sign(a), sb=Math.sign(b); let c; if(sa===sb&&Math.abs(a-b)<=2) c=.4; else if(sa===sb) c=.7; else c=1; const fa=foldIv(a), fb=foldIv(b); if(fa===fb) c=Math.min(c,.3); return c; }
@@ -81,9 +85,12 @@ function alignScore(q,ref){ // q: query intervals (may be longer / start later),
   return best; }
 function findTitles(t,opt){ const mono=psnMonoOf(t,opt).map(n=>n.p);
   if(mono.length<5) return []; const q=intervalsOf(mono);
-  return PSN_SONG_DB.map(([name,cat,ps])=>{ const iv=intervalsOf(ps); const raw=alignScore(q,iv); return {name,cat,sim:raw-.15*(1-Math.min(1,iv.length/12))}; }).sort((a,b)=>b.sim-a.sim).slice(0,3); }
+  const lib=(window.PSN_LIB_INDEX||[]).filter(e=>Array.isArray(e.ps)&&e.ps.length>=6).map(e=>({name:e.name+' · P-70 #'+e.p70,cat:'기본곡',ps:e.ps}));
+  const all=PSN_SONG_DB.map(([name,cat,ps])=>({name,cat,ps})).concat(lib).concat(PSN_DICT.map(d=>({name:d.name,cat:'내 곡 사전',ps:d.ps,mine:true})));
+  return all.map(e=>{ let iv=intervalsOf(e.ps); if(iv.length>q.length) iv=iv.slice(0,q.length); /* 사전 곡이 길면 앞부분만 비교 */ const raw=alignScore(q,iv); return {name:e.name,cat:e.cat,mine:!!e.mine,sim:raw-.15*(1-Math.min(1,iv.length/12))}; }).sort((a,b)=>b.sim-a.sim).slice(0,3); }
 
-function psnOpenTitleFinder(){ const t=activeTrack(); if(!t||!t.notes.length){ toast('멜로디가 있는 트랙을 고르세요.'); return; }
+function psnOpenTitleFinder(){ const lib=(typeof psnLibIndex==='function')?psnLibIndex().catch(()=>null):Promise.resolve(null); Promise.all([psnDictLoad(),lib]).then(psnOpenTitleFinderNow); }
+function psnOpenTitleFinderNow(){ const t=activeTrack(); if(!t||!t.notes.length){ toast('멜로디가 있는 트랙을 고르세요.'); return; }
   const seg=PSN_SEG; const bar=(60/project.bpm)*(project.beatsPerBar||4); const totalBars=Math.max(1,Math.ceil(Math.max(...t.notes.map(n=>n.s+n.d))/bar)); if(seg.fromBar>totalBars) seg.fromBar=1;
   const hasSel=typeof selected!=='undefined'&&selected.size>0; if(!hasSel) seg.useSel=false;
   const a=melodyToText(t,{toC:false,...seg}), c=melodyToText(t,{toC:true,...seg}); if(!a){ toast('그 구간에는 음표가 없어요. 시작 마디를 바꿔 보세요.'); return; }
@@ -100,16 +107,26 @@ function psnOpenTitleFinder(){ const t=activeTrack(); if(!t||!t.notes.length){ t
      ${hasSel?`<label><input type="checkbox" id="tfSel"${seg.useSel?' checked':''}> 악보판에서 고른 음표만</label>`:''}
      <button id="tfRefind">이 부분으로 다시 찾기</button></div>
     <div class="hint" style="margin-top:6px">찾는 데 쓰는 멜로디(다장조로 옮김): <code>${esc(c.text)}</code></div></div>
-   <div style="margin:8px 0 4px"><b>① 앱 안에서 찾기</b> <span class="hint">(인터넷 필요 없음 · 동요·캐럴·민요·유명 클래식 ${PSN_SONG_DB.length}곡)</span></div>${hitHtml}
+   <div style="margin:8px 0 4px"><b>① 앱 안에서 찾기</b> <span class="hint">(인터넷 필요 없음 · 동요·캐럴·민요·클래식 ${PSN_SONG_DB.length}곡 + 기본곡 ${(window.PSN_LIB_INDEX||[]).length}곡 + 내 사전 ${PSN_DICT.length}곡)</span></div>${hitHtml}
    <div style="margin:12px 0 4px"><b>② 인터넷에서 찾기</b> <span class="hint">(Musipedia 멜로디 검색 · 무료 · 로그인 없음)</span></div>
    <div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><button id="tfMusi" class="on">인터넷에서 이 멜로디 찾기</button><a id="tfMusiOpen" target="_blank" rel="noopener" href="${musiUrl}"><button>새 창에서 열기</button></a><a id="tfGoogle" target="_blank" rel="noopener"><button>구글 계이름 검색</button></a><button id="tfParsons">높낮이 기호 복사</button></div>
    <div id="tfMusiBox" style="margin-top:8px"></div>
-   <details style="margin-top:12px"><summary class="hint" style="cursor:pointer">③ (선택) AI 챗봇에게 물어볼 글 만들기</summary>
+   <div style="margin:12px 0 4px"><b>③ 내 곡 사전</b> <span class="hint">(등록한 곡 ${PSN_DICT.length}개 · 이 기기에 저장)</span></div>
+   <div class="hint">제목을 아는 곡(피아노 내장곡 등)을 한 번 녹음·채보해서 등록해 두면, 다음부터는 ①에서 바로 찾아요. 위에서 고른 구간(시작 마디부터 최대 40음)이 등록돼요.</div>
+   <div class="row" style="margin-top:6px;gap:6px"><input type="text" id="tfDictName" placeholder="이 멜로디의 곡 제목" value="${esc(/^(LinuxPC|첫 번째 곡|곡 \d+|직접 입력)/.test(project.name)?'':project.name)}" style="flex:1;min-width:0"><button id="tfDictAdd">이 멜로디 등록</button></div>
+   ${PSN_DICT.length?`<details style="margin-top:6px"><summary class="hint" style="cursor:pointer">등록된 곡 보기·지우기</summary><div class="sug-list" style="margin-top:4px">${PSN_DICT.map((d,i)=>`<label><span>${esc(d.name)}</span> <span class="hint">${d.ps.length}음</span><button class="pv tfDictDel" data-i="${i}">지우기</button></label>`).join('')}</div>
+   <div class="row" style="margin-top:6px;gap:6px"><button id="tfDictExport">사전 파일로 저장</button><button id="tfDictImport">사전 파일 불러오기</button></div></details>`:`<div class="row" style="margin-top:6px;gap:6px"><button id="tfDictImport">사전 파일 불러오기</button></div>`}
+   <details style="margin-top:12px"><summary class="hint" style="cursor:pointer">④ (선택) AI 챗봇에게 물어볼 글 만들기</summary>
    <textarea id="tfText" rows="6" readonly style="width:100%;margin-top:6px;font:13px/1.5 ui-monospace,monospace;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:inherit">${esc(summary)}</textarea>
    <div class="row" style="justify-content:flex-start;margin-top:6px"><button id="tfCopy">글 복사하기</button></div></details>`;
   $('#tfGoogle').href='https://www.google.com/search?q='+encodeURIComponent('계이름 '+c.text.split(' ').slice(0,12).join(' '));
   const refind=()=>{ seg.fromBar=Math.max(1,Math.min(totalBars,parseInt($('#tfFrom').value)||1)); seg.count=+$('#tfCount').value; seg.useSel=!!($('#tfSel')&&$('#tfSel').checked); hideOverlay(); msg.innerHTML=''; psnOpenTitleFinder(); };
-  $('#tfRefind').onclick=refind; $('#tfFrom').onkeydown=e=>{ if(e.key==='Enter') refind(); }; $('#tfCount').onchange=refind; if($('#tfSel')) $('#tfSel').onchange=refind;
+  $('#tfRefind').onclick=refind;
+  $('#tfDictAdd').onclick=async()=>{ const name=($('#tfDictName').value||'').trim(); if(!name){ toast('곡 제목을 적어 주세요.'); return; } const ps=psnMonoOf(t,{fromBar:seg.fromBar,count:40,useSel:seg.useSel}).map(n=>n.p); if(ps.length<6){ toast('음이 6개 이상 있어야 등록할 수 있어요.'); return; }
+    const i=PSN_DICT.findIndex(d=>d.name===name); if(i>=0) PSN_DICT[i]={name,ps}; else PSN_DICT.push({name,ps}); if(await psnDictSave()){ toast(`‘${name}’을(를) 곡 사전에 등록했어요 (${ps.length}음).`); refind(); } };
+  msg.querySelectorAll('.tfDictDel').forEach(b=>b.onclick=async()=>{ const d=PSN_DICT[+b.dataset.i]; if(!d) return; hideOverlay(); msg.innerHTML=''; if(!(await confirmBox(`‘${d.name}’을(를) 곡 사전에서 지울까요?`,'지우기'))) { psnOpenTitleFinderNow(); return; } PSN_DICT.splice(+b.dataset.i,1); await psnDictSave(); psnOpenTitleFinderNow(); });
+  if($('#tfDictExport')) $('#tfDictExport').onclick=()=>saveFile('우리집연주실-곡사전.json',JSON.stringify({format:'home-piano-studio-dict',version:1,songs:PSN_DICT}));
+  if($('#tfDictImport')) $('#tfDictImport').onclick=()=>{ const inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json'; inp.onchange=async()=>{ const f=inp.files[0]; if(!f) return; try{ const o=JSON.parse(await f.text()); if(o.format!=='home-piano-studio-dict'||!Array.isArray(o.songs)) throw 0; let n=0; for(const d of o.songs){ if(!d||!d.name||!Array.isArray(d.ps)) continue; const i=PSN_DICT.findIndex(x=>x.name===d.name); if(i>=0) PSN_DICT[i]=d; else PSN_DICT.push(d); n++; } await psnDictSave(); toast(`${n}곡을 사전에 넣었어요.`); hideOverlay(); msg.innerHTML=''; psnOpenTitleFinderNow(); }catch(e){ toast('곡 사전 파일이 아니에요.'); } }; inp.click(); }; $('#tfFrom').onkeydown=e=>{ if(e.key==='Enter') refind(); }; $('#tfCount').onchange=refind; if($('#tfSel')) $('#tfSel').onchange=refind;
   const cp=async(txt,ok)=>{ try{ await navigator.clipboard.writeText(txt); toast(ok); }catch(e){ toast('복사가 막혀 있어요. 글을 길게 눌러 직접 복사해 주세요.'); } };
   $('#tfParsons').onclick=()=>cp(a.parsons,'높낮이 기호를 복사했어요.');
   // Musipedia refuses to be embedded directly (X-Frame-Options) and has no CORS header, so the page is fetched
