@@ -106,6 +106,7 @@ def patch_html(raw: bytes) -> tuple[bytes, dict]:
         raise ValueError('No original style anchor.')
     text = text[:pos] + head + text[pos:]
     body = (BODY_A + '<script src="./app/original-addon.js"></script>\n'
+            '<script src="./app/title-finder.js"></script>\n'
             '<script src="./app/next-boot.js"></script>\n'
             '<script src="./app/version-switch.js" data-current-version="2"></script>\n' + BODY_B)
     pos = closing_offset(text, 'body')

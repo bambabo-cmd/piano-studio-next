@@ -99,7 +99,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(m['start_url'],'./');self.assertEqual(m['id'],'./')
     def test_13_required_script_references_are_relative(self):
         html=build_site.patch_html(FIXTURE)[0].decode()
-        for name in ['theme.js','original-addon.js','next-boot.js']:
+        for name in ['theme.js','original-addon.js','title-finder.js','next-boot.js']:
             self.assertIn('./app/'+name,html)
     def test_14_wrong_encoding_rejected(self):
         with self.assertRaises(UnicodeDecodeError):build_site.patch_html(b'\xff\xfe'+FIXTURE)
@@ -119,6 +119,8 @@ class NavigationBuildTests(unittest.TestCase):
         self.assertIn(b'data-current-version="2"',output)
         self.assertIn(b'./app/version-switch.css',output)
         self.assertIn('version-switch.js',(ROOT/'app/sw.js').read_text())
+        self.assertIn('title-finder.js',(ROOT/'app/sw.js').read_text())
+        self.assertIn('./app/title-finder.js',output.decode())
     def test_nav_does_not_rewire_recording(self):
         output,_=build_site.patch_html(FIXTURE)
         self.assertEqual(FIXTURE.count(b"q('recBtn').onclick="), output.count(b"q('recBtn').onclick="))

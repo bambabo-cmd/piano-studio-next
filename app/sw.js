@@ -7,7 +7,7 @@ const CACHE = PREFIX + BUILD;
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   './bp.bundle.js', './vexflow-bravura.js', './app/theme.js',
-  './app/original-addon.js', './app/original-addon.css', './app/next-boot.js',
+  './app/original-addon.js', './app/original-addon.css', './app/title-finder.js', './app/next-boot.js',
   './app/version-switch.js', './app/version-switch.css'
 ].map(path => new URL(path, ROOT).href);
 const KNOWN = new Set(SHELL);
