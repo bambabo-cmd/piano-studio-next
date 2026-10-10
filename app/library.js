@@ -31,6 +31,7 @@ async function psnScoreFull(){ if(!project||!project.tracks.some(t=>t.notes.leng
   try{ await loadVF(); }catch(e){ toast('악보 그리기 파일을 불러오지 못했어요. 인터넷 연결 후 다시 시도해 주세요.'); return; }
   if(!PSN_SV.el){ const el=document.createElement('div'); el.id='psnScoreFull'; el.innerHTML=`<style>
     #psnScoreFull{position:fixed;inset:0;z-index:9000;background:#fff;color:#111;display:flex;flex-direction:column;font:14px/1.4 "IBM Plex Sans KR",system-ui,sans-serif}
+    #psnScoreFull[hidden]{display:none !important}
     #psnScoreFull .bar{display:flex;gap:8px;align-items:center;padding:6px 10px;border-bottom:1px solid #ddd;background:#fafafa;flex-wrap:wrap}
     #psnScoreFull .bar select,#psnScoreFull .bar button{font:inherit;padding:4px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#111;min-height:34px}
     #psnScoreFull .pg{flex:1;display:flex;align-items:stretch;justify-content:center;gap:10px;padding:8px;min-height:0;position:relative;user-select:none;-webkit-user-select:none;touch-action:pan-y}
@@ -40,7 +41,7 @@ async function psnScoreFull(){ if(!project||!project.tracks.some(t=>t.notes.leng
     #psnScoreFull .zone.l{left:0}#psnScoreFull .zone.r{right:0}
     #psnScoreFull .num{font-variant-numeric:tabular-nums;margin-left:auto;color:#555}
     #psnScoreFull .hint{color:#777;font-size:12px}
-   </style><div class="bar"><select class="tr"></select><select class="sp"><option value="hand">양손 자동</option><option value="60">가운데 도 기준</option><option value="none">한 줄</option></select><select class="gr"><option value="1">16분음표</option><option value="2">8분음표</option><option value="4">4분음표</option></select><button class="prev">◀</button><span class="num"></span><button class="next">▶</button><span class="hint">화면 왼쪽/오른쪽을 누르면 앞·뒤 쪽</span><button class="close">닫기</button></div><div class="pg"><div class="page a"></div><div class="page b"></div><div class="zone l"></div><div class="zone r"></div></div>`;
+   </style><div class="bar"><select class="tr"></select><select class="sp"><option value="hand">양손 자동</option><option value="60">가운데 도 기준</option><option value="none">한 줄</option></select><select class="gr"><option value="1">16분음표</option><option value="2">8분음표</option><option value="4">4분음표</option></select><button class="prev">◀</button><span class="num"></span><button class="next">▶</button><span class="hint">화면 왼쪽/오른쪽을 누르면 앞·뒤 쪽</span><button class="close" style="margin-left:6px;font-weight:600;border-color:#888">✕ 닫기</button></div><div class="pg"><div class="page a"></div><div class="page b"></div><div class="zone l"></div><div class="zone r"></div></div>`;
     document.body.appendChild(el); PSN_SV.el=el;
     el.querySelector('.close').onclick=psnScoreClose; el.querySelector('.prev').onclick=()=>psnScoreGo(-1); el.querySelector('.next').onclick=()=>psnScoreGo(1);
     el.querySelector('.zone.l').onclick=()=>psnScoreGo(-1); el.querySelector('.zone.r').onclick=()=>psnScoreGo(1);
@@ -49,8 +50,8 @@ async function psnScoreFull(){ if(!project||!project.tracks.some(t=>t.notes.leng
     window.addEventListener('resize',()=>{ if(PSN_SV.el&&!PSN_SV.el.hidden){ const W=psnScorePer()===2?1000:(innerWidth<700?640:900); if(W!==PSN_SV.renderW) psnScoreRender(); else psnScoreLayout(); } });
     document.addEventListener('keydown',e=>{ if(!PSN_SV.el||PSN_SV.el.hidden) return; if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); psnScoreGo(1); } else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); psnScoreGo(-1); } else if(e.key==='Escape'){ psnScoreClose(); } },true); }
   const sel=PSN_SV.el.querySelector('.tr'); const trs=project.tracks.filter(t=>t.notes.length); sel.innerHTML='<option value="all">모든 트랙</option>'+trs.map(t=>`<option value="${t.id}">${String(t.name).replace(/</g,'&lt;')}</option>`).join(''); if(!trs.some(t=>t.id===PSN_SV.tracks)) PSN_SV.tracks=trs.length===1?trs[0].id:'all'; sel.value=PSN_SV.tracks; PSN_SV.el.querySelector('.sp').value=PSN_SV.split; PSN_SV.el.querySelector('.gr').value=String(PSN_SV.grid);
-  PSN_SV.el.hidden=false; document.body.style.overflow='hidden'; PSN_SV.page=0; psnScoreRender(); try{ if(screen.orientation&&screen.orientation.lock) screen.orientation.lock('any').catch(()=>{}); }catch(e){} }
-function psnScoreClose(){ if(!PSN_SV.el) return; PSN_SV.el.hidden=true; document.body.style.overflow=''; }
+  PSN_SV.el.hidden=false; PSN_SV.el.style.display=''; document.body.style.overflow='hidden'; PSN_SV.page=0; psnScoreRender(); try{ if(screen.orientation&&screen.orientation.lock) screen.orientation.lock('any').catch(()=>{}); }catch(e){} }
+function psnScoreClose(){ if(!PSN_SV.el) return; PSN_SV.el.hidden=true; PSN_SV.el.style.display='none'; document.body.style.overflow=''; }
 function psnScoreRender(){ const trs=PSN_SV.tracks==='all'?project.tracks.filter(t=>t.notes.length):project.tracks.filter(t=>t.id===PSN_SV.tracks); if(!trs.length) return;
   const split=PSN_SV.split==='none'?null:PSN_SV.split==='hand'?'hand':+PSN_SV.split; const score=buildScore(trs,{split,grid:PSN_SV.grid,legato:true});
   const W=psnScorePer()===2?1000:(innerWidth<700?640:900); PSN_SV.renderW=W; const tmp=document.createElement('div'); tmp.style.cssText='position:absolute;left:-9999px;top:0;width:'+W+'px'; document.body.appendChild(tmp);

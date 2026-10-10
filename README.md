@@ -1,5 +1,9 @@
 # 우리집 연주실 2 · Piano Studio Next
 
+## 2.0.0-alpha.30.1 — 악보 전체 화면 ‘닫기’ 수정
+
+alpha.30.1: 전체 화면 악보의 닫기 버튼·Esc가 숨김 플래그만 바꾸고 화면은 그대로 남던 문제 수정(뷰어 CSS의 display:flex가 hidden 속성을 덮어씀). 닫기 후 실제로 화면에서 사라지는지 Chromium에서 확인.
+
 ## 2.0.0-alpha.30 — 기본곡 보관함(클래식 27곡) · 악보 전체 화면 보기
 
 - **파일 → 기본곡 보관함 · 클래식**: 야마하 P-70 내장 50곡 중 27곡을 오른손·왼손 트랙으로 넣음(재생·악보·편집·제목 찾기 모두 적용). 음표 데이터는 Mutopia Project의 퍼블릭 도메인/CC BY-SA LilyPond 악보를 LilyPond 2.25로 MIDI 변환해 추출(`app/library/*.json`, 출처·라이선스는 `app/LIBRARY_CREDITS.md`). 나머지 23곡은 접근 가능한 퍼블릭 도메인 악보가 없어 미수록.

@@ -1,13 +1,3 @@
-우리집 연주실 2 (piano-studio-next) alpha.30 전체 소스
-
-이 폴더의 내용 전체를 GitHub 저장소 bambabo-cmd/piano-studio-next 최상위에 올리면 됩니다.
-
-1. 저장소 페이지 → Add file → Upload files
-2. 이 폴더 안의 모든 것(.github 폴더 포함, 이 txt는 빼도 됨)을 끌어다 놓기
-   - ZIP 자체를 올리거나 'piano-studio-next-full' 폴더 한 겹을 더 만들지 말 것
-   - 같은 이름 파일은 자동으로 교체됨
-3. Commit changes
-4. Actions 탭에서 'Build and deploy Piano Studio Next'가 초록 체크로 끝나면(1~3분) 앱 탭을 완전히 닫았다가 다시 열기
-5. 확인: https://bambabo-cmd.github.io/piano-studio-next/build-info.json 에 version 2.0.0-alpha.30
-
-새로 들어간 것: 파일 메뉴 '기본곡 보관함 · 클래식'(27곡), 악보·편집 메뉴 '곡 제목 찾기', '악보 전체 화면 보기'
+우리집 연주실 2 alpha.30.1 전체 소스
+이 폴더 안의 내용 전부를 저장소 최상위에 올리고 Commit → Actions 완료 후 앱 탭을 완전히 닫았다 다시 열기.
+바뀐 것: 전체 화면 악보의 닫기 버튼·Esc가 실제로 화면을 닫음.
